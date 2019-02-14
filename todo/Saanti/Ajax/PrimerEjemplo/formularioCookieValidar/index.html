@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<!--
+To change this license header, choose License Headers in Project Properties.
+To change this template file, choose Tools | Templates
+and open the template in the editor.
+-->
+<html>
+    <head>
+        <title>TODO supply a title</title>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <script>
+
+            function reset() {
+                document.getElementById("myForm").reset();
+            }
+
+
+            function validaDNI() {
+
+
+                var expresion = new RegExp("^[0-9]{8}[A-Z]{1}$", "g");
+                var dni = document.forms["myForm"].elements["dni"].value;
+                var valido = (expresion.test(dni));
+
+                if (valido === true) {
+                    alert("DNI VALIDO: " + dni);
+                } else if (valido === false) {
+                    alert("DNI INCORRECTO: " + dni);
+                }
+
+                return valido;
+
+            }
+
+            function validaNombre() {
+
+                var expresion = new RegExp("^[a-z]{3,}$", "g");
+                var nombre = document.forms["myForm"].elements["nombre"].value;
+                var valido = (expresion.test(nombre));
+
+                if (valido === true) {
+                    alert("NOMBRE VALIDO: " + nombre);
+                } else if (valido === false) {
+                    alert("NOMBRE INCORRECTO: " + nombre);
+                }
+
+                return valido;
+            }
+            function validarForm() {
+                var valido = false;
+                if (validaNombre() === true && validaDNI() === true) {
+                    valido = true;
+                }
+                return valido;
+
+            }
+
+        </script>
+    </head>
+    <body>
+
+        <h2>HTML Forms</h2>
+
+        <form method="post"  enctype="multipart/form-data" action ="recibe.php" id="myForm" onsubmit="return validarForm()">
+            Nombre:<br>
+            <input type="text" name="nombre" value="">
+            <br>
+            DNI:<br>
+            <input type="text" name="dni" value="">
+            <br><br>
+            <input type="submit" value="Submit">
+            <div>
+                <input type="radio" name="gender" value="male" checked> Male<br>
+                <input type="radio" name="gender" value="female"> Female<br>
+                <input type="radio" name="gender" value="other"> Other  - 
+            </div>
+        </form> 
+        <button onclick="reset()">Reset</button>
+
+        <img style="cursor: pointer" src="imagen/reset.png" alt="" onclick="reset()" id="imgReset"/>
+
+        <div id="datos"></div>
+    </body>
+</html>

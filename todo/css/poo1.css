@@ -1,0 +1,11 @@
+table, tr,th{
+	border: 1px solid red;
+}
+
+
+ th{
+	
+	width: 50px;
+	height: 50px;
+}
+

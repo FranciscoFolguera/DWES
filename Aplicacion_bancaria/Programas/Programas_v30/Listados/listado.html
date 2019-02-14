@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="es">
+  <head>
+    <title>Mi banco - Movimientos</title>
+    <meta charset="utf-8" />
+    <meta author="Santiago Alonso Gomez" />
+    <meta description="Listado de movimientos" />
+    <meta keywords="Banco casero" />
+
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+<!-- Carga de BootStrap con popper -->
+  <!-- El css -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/css/bootstrap.min.css" integrity="sha384-GJzZqFGwb1QTTN6wy59ffF1BuGJpLSa9DkKMp0DgiMDm4iYMj70gZWKYbI706tWS" crossorigin="anonymous">
+  <!-- jquery -->
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+  <!-- popper -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.6/umd/popper.min.js" integrity="sha384-wHAiFfRlMFy6i5SRaxvfOCifBUQy1xHdJ/yoi7FRNXMRBu5WHdZYu1hA6ZOblgut" crossorigin="anonymous"></script>
+  <!-- bootstrap.js -->
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/js/bootstrap.min.js" integrity="sha384-B0UglyR+jN6CkvvICOB2joaf5I4l3gm9GU6Hc1og6Ls7i6U/mkkaduKaBhlAXv9k" crossorigin="anonymous"></script>
+
+    <link rel="stylesheet" type="text/css" href="../css/estilos.css" />
+
+    <script type="text/javascript" src="../js/programa.js"></script>
+
+  </head>
+  <body>
+<div class="container">
+<header>
+  <div class="row">
+    <div class="col-12">
+      <h1>BANCO RIENDO</h1>
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="col-12">
+      <h3>LISTADO DE MOVIMIENTOS</h3>
+    </div>
+  </div>
+</header>
+<section id="pedir_datos">
+  <div class="row">
+    <div class="col-12">
+      <form>
+      Número de cuenta:&nbsp;<input type="text" maxlength="10" size="10" id="cuenta" value="10 dígitos">
+      &nbsp;&nbsp;<button type="button" id="btn_cuenta">Comprobar cuenta</button>
+      </br>
+      </br>
+      Fecha inicial: &nbsp;<input type="date" id="f_inicial">
+      &nbsp;&nbsp;Fecha final: &nbsp;<input type="date" id="f_final">
+      </br></br>
+      <button type="button" id="btn_mostrar">Mostrar movimientos</button>
+</br>
+    </div>
+  </div>
+</section>
+<section id="mostrar_movi">
+  <div class="row">
+    <div class="col-12">
+      <table>
+       <thead>
+         <tr>
+           <th>FECHA</th>
+           <th>HORA</th>
+           <th>DESCRIPCIÓN</th>
+           <th>IMPORTE</th>
+         </tr>
+       </thead>
+       <tbody id="movimientos">
+       </tbody>    
+      </table>
+    </div>
+  </div>
+</section>
+<section id="mostrar_error">
+  <div class="row">
+    <div class="col-12">
+      <p id="p_error">Aviso: Introduzca bien los datos para realizar la consulta</p>
+    </div>
+  </div>
+</section>
+
+<nav>
+  <div class="row">
+    <div class="col-12">
+</br>
+      <p><a href="http://localhost">Atrás</a> &nbsp;&nbsp;&nbsp;<a href="">Más movimientos</a></p>
+    </div>
+  </div>
+</nav>
+
+<footer>
+  <div class="row">
+    <div class="col-12">
+      <p>Contacta con nosotros: info@banco_riendo.com</p>
+    </div>
+  </div>
+</footer>
+</div>
+  </body>
+</html>
+

@@ -1,0 +1,13 @@
+﻿¿Cuál es la capital de España? |Madrid| Donde se encuentra la puerta del sol
+¿Dónde está la Torre Eiffel?|París| En la capital de Francia.
+¿A qué país pertenece la torre de Pisa?|Italia| El país cuyo plato típico es la pasta.
+¿En qué país estamos si disfrutamos de un delicioso plato de goulash?|Hungría| País que limita con Austria.
+Si estamos visitando el Museo del Hermitage, ¿en qué país nos encontramos?| Rusia| País donde está la ciudad de San Petersburgo
+¿Dónde encontramos las Pirámides de Giza?|Egipto| Es uno de los monumentos más antiguos del mundo.
+¿De qué país son típicos los mojitos?|Cuba| Colombia, Méjico, Cuba o República Dominicana.
+¿Dónde podemos encontrar al Lemur?|Madagascar| Especie endémica de una isla.
+¿En las calles de qué ciudad encontraríamos a Jack el destripador?|Londres| La ciudad del Támesis
+La comunidad autónoma con mayor superficie|Castilla y León|Está entre Castilla y León, Galicia, Andalucía o Castilla y la Mancha.
+
+
+

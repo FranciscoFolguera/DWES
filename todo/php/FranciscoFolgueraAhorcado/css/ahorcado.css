@@ -1,0 +1,18 @@
+
+
+body{
+	background-color:  #ffcc80 ;
+}
+.barritas{
+	font-size: 50px;
+	text-align: center;
+	font-weight: bold;
+}
+.imagen{
+	width: 650px;
+	height: 350px;
+	
+}
+.rojo{
+	color: red;
+}
