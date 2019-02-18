@@ -6,7 +6,7 @@ include_once '../include/header.php';
 session_start();
 include '../include/funciones.php';
 
-$conex =  mysqli_connect("localhost", "root", "1234", "clasedaw18");
+$conex = mysqli_connect("localhost", "root", "1234", "clasedaw18");
 //$conex = new mysqli("db4free.net", "lauraperez", "iesetgc2018", "clasedaw18");
 
 
@@ -15,164 +15,161 @@ if (mysqli_connect_errno()) {
     exit();
 }
 
-$resultado = mysqli_query($conex,"SELECT * FROM notas");
-print_r($resultado);
+$resultadoAlum = mysqli_query($conex, "SELECT * FROM alumnos");
 
-if ($resultado) {
+if ($resultadoAlum) {
 
-    $row_cnt = $resultado->num_rows;
+    $row_cnt = mysqli_num_rows($resultadoAlum);
 }
 ?>
-<table>
-    <tr>
-        <th>ID_ALUMNO</th>
-        <th>ID_ASIGNATURA</th>
-        <th>NOTA</th>
-       
-    </tr>
-    <?php
-    while ($row = $resultado->fetch_assoc()) {
-        $id_alumno = $row["ID_ALUMNO"];
-        $id_asignatura = $row["ID_ASIGNATURA"];
-        ?>
+<div class="tablas">
+    <table>
         <tr>
-            
-            <td><?php echo $row["ID_ALUMNO"]; ?></td>
-            <td><?php echo $row["ID_ASIGNATURA"]; ?></td>      
-         
-            <td><a href="<?php echo"http://localhost/GitDWES/todo/php/CRUDAlumnos/mantenimiento/alumno.php?id_alumno=$id_alumno?id_asignatura=$id_asignatura"; ?>"><?php echo $row["NOTA"]; ?></a></td> 
-
-
+            <th>ID</th>
+            <th>NOMBRE</th>
+            <th>FECHA NACIMIENTO</th>
+            <th>MAYOR EDAD</th>
         </tr>
         <?php
-    }
+        while ($row = mysqli_fetch_assoc($resultadoAlum)) {
+            $id_alumno = $row["ID"];
+            ?>
+            <tr>
+                <td><?php echo $id_alumno; ?></td> 
+                <td><?php echo $row["NOMBRE"]; ?></td>
+                <td><?php echo $row["FECHA_NACIMIENTO"]; ?></td>      
+                <td><?php echo $row["MAYOR_EDAD"]; ?></td>
 
-    if (isset($_GET["id"])) {
-        $idGet = $_GET["id"];
-        $_SESSION['id'] = $idGet;
-        //echo $idGet;
-        // $resultadoGET = $conex->query("SELECT id,nombre,fecha_nacimiento FROM alumnos where id=$idGet");
-        
 
-        $stmt = $conex->prepare("SELECT id,nombre,fecha_nacimiento FROM alumnos where id=?");
-        $stmt->bind_param("i", $idGet);
-        $stmt->execute();
-        $result = $stmt->get_result();
-        //if ($result->num_rows === 0) exit('No rows');
-        while ($row = $result->fetch_assoc()) {
-            $fechaNacGET = $row['fecha_nacimiento'];
-            $nombreGET = $row['nombre'];
-            
+            </tr>
+            <?php
         }
-        //var_export($names);
+
+        if (isset($_GET["id"])) {
+            $idGet = $_GET["id"];
+            $_SESSION['id'] = $idGet;
+        }
+        ?>
+    </table>
+    <?php
+    $resultado_asig = mysqli_query($conex, "SELECT * FROM asignaturas");
+
+    if ($resultado_asig) {
+
+        $row_cnt_asig = mysqli_num_rows($resultado_asig);
     }
     ?>
-</table>
+    <table>
+        <tr>
+            <th>ID</th>
+            <th>NOMBRE</th>
+            <th>FECHA NACIMIENTO</th>
+            <th>MAYOR EDAD</th>
+        </tr>
+        <?php
+        while ($row = mysqli_fetch_assoc($resultado_asig)) {
+            $id_asignatura = $row["ID"];
+            ?>
+            <tr>
+                <td><?php echo$id_asignatura; ?></td> 
+                <td><?php echo $row["NOMBRE"]; ?></td>
+                <td><?php echo $row["CURSO"]; ?></td>      
+                <td><?php echo $row["CICLO"]; ?></td>
+
+
+            </tr>
+            <?php
+        }
+
+        if (isset($_GET["id"])) {
+            $idGet = $_GET["id"];
+            $_SESSION['id'] = $idGet;
+        }
+        ?>
+    </table>
+</div>
+
 <?php
-if (!isset($_GET['submit'])) {
+echo "<h1>La sesion de la nota ";
+echo $_SESSION['nota'];
+echo "</h1>";
+if (!isset($_SESSION['nota'])) {
     //no se ha enivado
-    if (!isset($_GET['id'])) {
-        $nombreGET = $fechaNacGET = "";
-    }
     ?>
     <form action=<?php echo htmlspecialchars($_SERVER["PHP_SELF"]); ?> method="GET">
-        Nombre: <input type="text" name="name" value=<?php echo $nombreGET; ?>><br>
-        Fecha de nacimiento: <input type="date" name="fechaNac" value=<?php echo $fechaNacGET; ?>><br>
-        <input type="submit" name="submit" value="crear">
-        <input type="submit" name="submit" value="eliminar">
-        <input type="submit" name="submit" value="modificar">
+        <div class="tablas">
+            ID_ALUMNO: <input type="number" name="id_alGET" required="required"><br>
+            ID_ASIGNATURA: <input type="number" name="id_asigGET" required="required"><br>
+        </div>
+
+        NOTA: <input type="number" name="nota" disabled="disabled" ><br>
+        <input type="submit" name="submit" value="check">
     </form>
     <?php
 } else {
+    
     ?>
     <form action=<?php echo htmlspecialchars($_SERVER["PHP_SELF"]); ?> method="GET">
-        Nombre: <input type="text" name="name"><br>
-        Fecha de nacimiento: <input type="date" name="fechaNac"><br>
-        <input type="submit" name="submit" value="crear">
-        <input type="submit" name="submit" value="eliminar">
+        <div class="tablas">
+            ID_ALUMNO: <input type="number" name="id_alGET" readonly="readonly" value=<?php echo $_SESSION['id_alum']; ?>><br>
+            ID_ASIGNATURA: <input type="number" name="id_asigGET"  readonly="readonly" value=<?php echo $_SESSION['id_asig']; ?>><br>
+        </div>
+        NOTA: <input type="number" name="nota" required="required"><br>
+
         <input type="submit" name="submit" value="modificar">
     </form>
     <?php
 }
 
-if (isset($_GET['submit']) && isset($_SESSION['id'])) {
-    $nombreForm = ($_GET['name']);
-    $fechaForm = ($_GET['fechaNac']);
-    $action = $_GET["submit"];
-    $idQuery = $_SESSION['id'];
-    echo "<h2>$action y $idQuery</h2>";
+if (isset($_GET['submit']) && ($_GET['submit']) === 'check') {
 
-    if ($action === "modificar") {
-        
-        if (test_nombre($nombreForm) && strcmp($fechaForm, "") !== 0) {
-        $mayor = getAge($fechaForm);
+    echo "<h3>holaaaaaaaaaaa</h3>";
+    $id_alumGET = $_GET['id_alGET'];
+    $id_asigGET = $_GET['id_asigGET'];
+
+    $stmt_select_nota = mysqli_prepare($conex, "SELECT nota FROM notas where id_alumno=? and id_asignatura=?");
+    mysqli_stmt_bind_param($stmt_select_nota, 'ii', $id_alumGET, $id_asigGET);
+    mysqli_stmt_execute($stmt_select_nota);
 
 
-       echo "se va a cambiar a $nombreForm y $fechaForm";
-        
-        $stmt_update = $conex->prepare("UPDATE alumnos set NOMBRE=?, FECHA_NACIMIENTO=?, MAYOR_EDAD=? where ID=?");
-        $stmt_update->bind_param("ssii", $nombreForm,$fechaForm,$idQuery,$mayor);
-        $result=$stmt_update->execute();
-        echo 'bieeeeeeeeen';
-        var_dump($result);
-    }else{
-        echo "<h2>A donde vas zorro</h2>";
-    }
-        
-       
-    }
-    if ($action === "eliminar") {
-      
-        $stmt_delete= $conex->prepare("DELETE from alumnos where ID=?");
-        $stmt_delete->bind_param("i", $idQuery);
-        $result_delete=$stmt_delete->execute();
-       
-      if($result_delete==true){
-        echo 'usuario borrado';  
-      }else{
-           $stmt_select_nota = $conex->prepare("SELECT id_alumno FROM notas where id_alumno=?");
-        $stmt_select_nota->bind_param("i", $idQuery);
-        $stmt_select_nota->execute();
-        $result = $stmt_select_nota->get_result();
-        //if ($result->num_rows === 0) exit('No rows');
-        $referenciado = $result->fetch_assoc();
-       
-            if($referenciado>0){
-                echo 'no se puede borrar el alumno porque esta referenciado en otras tablas';
-            }
-        
-      }
-        //$resultadoQuery->close();
-    }
+
+    mysqli_stmt_bind_result($stmt_select_nota, $nota);
+
+    mysqli_stmt_fetch($stmt_select_nota);
+
+    $_SESSION['nota'] = $nota;
+    $_SESSION['id_alum'] = $id_alumGET;
+    $_SESSION['id_asig'] = $id_asigGET;
+     echo "<h3>$nota</h3>"; echo "<h3>holaaaaaaaaaaa</h3>";
+      echo "<h3>holaaaaaaaaaaa</h3>";
+      var_dump($_SESSION);
+     
 }
-if (isset($_GET['submit']) && $_GET['submit'] === "crear") {
-    $nombreForm = filtrado($_GET['name']);
+if (isset($_GET['submit']) && ($_GET['submit']) === 'modificar') {
+    echo "<pre>";
+    var_dump( $_GET);
+    echo "</pre>";
+    $id_alumGET = $_GET['id_alGET'];
+    $id_asigGET = $_GET['id_asigGET'];
+    $nota_GET = $_GET['nota'];
 
-    $fechaForm = filtrado($_GET['fechaNac']);
+    $stmt_update = mysqli_prepare($conex, "UPDATE notas SET nota=? WHERE id_alumno=? and id_asignatura=?");
 
-    if (test_nombre($nombreForm) && strcmp($fechaForm, "") !== 0) {
-        $mayor = getAge($fechaForm);
+    mysqli_stmt_bind_param($stmt_update, 'iii', $nota_GET, $id_alumGET, $id_asigGET);
+    mysqli_stmt_execute($stmt_update);
 
 
-        $resultadoQuery = $conex->prepare("INSERT INTO alumnos (NOMBRE, FECHA_NACIMIENTO, MAYOR_EDAD) VALUES (?, ?, ?)");
-        $resultadoQuery->bind_param('ssi', $nombreForm, $fechaForm, $mayor);
-
-        $resultadoQuery->execute();
-        if ($resultadoQuery) {
-            echo "modificiación completada";
-        } else {
-            echo "error";
-        }
-        $resultadoQuery->close();
-    }else{
-        echo "<h2>A donde vas zorro</h2>";
-    }
-}
-if(isset($_GET['submit'])){
     $archivoActual = $_SERVER['PHP_SELF'];
-header("Refresh:2; $archivoActual");
+  header("Refresh:2; $archivoActual");
+        
 }
 
+/*
+  if (isset($_GET['submit'])) {
+  $archivoActual = $_SERVER['PHP_SELF'];
+  header("Refresh:2; $archivoActual");
+  }
+ */
 $conex->close();
 
 /*
