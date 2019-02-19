@@ -131,7 +131,7 @@ function mostrarMovimientos(){
 	
 		var fila= parseInt(prompt("Introduce el numero de fila"));
 		alert(fila);
-		var url = "http://localhost/GitDWES/Aplicacion_bancaria/Programas/Programas_v20_ajax/Listados/listado_01.php?";
+		var url = "http://localhost/DWES/Aplicacion_bancaria/Programas/Programas_v20_ajax/Listados/listado_01.php?";
 		alert('pruieba 1');
     $.ajax({
         url: url,
