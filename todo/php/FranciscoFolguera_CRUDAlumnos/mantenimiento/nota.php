@@ -90,9 +90,7 @@ if ($resultadoAlum) {
 </div>
 
 <?php
-echo "<h1>La sesion de la nota ";
-echo $_SESSION['nota'];
-echo "</h1>";
+
 if (!isset($_SESSION['nota'])) {
     //no se ha enivado
     ?>
@@ -114,7 +112,7 @@ if (!isset($_SESSION['nota'])) {
             ID_ALUMNO: <input type="number" name="id_alGET" readonly="readonly" value=<?php echo $_SESSION['id_alum']; ?>><br>
             ID_ASIGNATURA: <input type="number" name="id_asigGET"  readonly="readonly" value=<?php echo $_SESSION['id_asig']; ?>><br>
         </div>
-        NOTA: <input type="number" name="nota" required="required"><br>
+        NOTA: <input type="number" name="nota" required="required" value=<?php echo $_SESSION['nota']; ?>><br>
 
         <input type="submit" name="submit" value="modificar">
     </form>
@@ -123,7 +121,7 @@ if (!isset($_SESSION['nota'])) {
 
 if (isset($_GET['submit']) && ($_GET['submit']) === 'check') {
 
-    echo "<h3>holaaaaaaaaaaa</h3>";
+  
     $id_alumGET = $_GET['id_alGET'];
     $id_asigGET = $_GET['id_asigGET'];
 
@@ -140,15 +138,14 @@ if (isset($_GET['submit']) && ($_GET['submit']) === 'check') {
     $_SESSION['nota'] = $nota;
     $_SESSION['id_alum'] = $id_alumGET;
     $_SESSION['id_asig'] = $id_asigGET;
-     echo "<h3>$nota</h3>"; echo "<h3>holaaaaaaaaaaa</h3>";
-      echo "<h3>holaaaaaaaaaaa</h3>";
-      var_dump($_SESSION);
+    
+        $archivoActual = $_SERVER['PHP_SELF'];
+  header("Refresh:0; $archivoActual");
+        
      
 }
 if (isset($_GET['submit']) && ($_GET['submit']) === 'modificar') {
-    echo "<pre>";
-    var_dump( $_GET);
-    echo "</pre>";
+    
     $id_alumGET = $_GET['id_alGET'];
     $id_asigGET = $_GET['id_asigGET'];
     $nota_GET = $_GET['nota'];
@@ -156,7 +153,12 @@ if (isset($_GET['submit']) && ($_GET['submit']) === 'modificar') {
     $stmt_update = mysqli_prepare($conex, "UPDATE notas SET nota=? WHERE id_alumno=? and id_asignatura=?");
 
     mysqli_stmt_bind_param($stmt_update, 'iii', $nota_GET, $id_alumGET, $id_asigGET);
-    mysqli_stmt_execute($stmt_update);
+   $realizado=(mysqli_stmt_execute($stmt_update));
+   if($realizado){
+        $_SESSION['nota'] =$nota_GET;
+   }else{
+       echo "<h3>No se ha podido realizar el cambio</h3>";
+   }
 
 
     $archivoActual = $_SERVER['PHP_SELF'];
