@@ -6,9 +6,9 @@ if(!isset($_SESSION)){
     session_start();
 
 }
-if(isset($_GET['dni'])&&isset($_GET['password'])){
-    $dni= filtrado($_GET['dni']);
-    $password= filtrado($_GET['password']);
+if(isset($_POST['dni'])&&isset($_POST['password'])){
+    $dni= filtrado($_POST['dni']);
+    $password= filtrado($_POST['password']);
 }
 function muestra_tabla() {
     $rows = select_comentarios();
@@ -34,9 +34,9 @@ function muestra_tabla() {
 
     echo"</table>";
 }
-
-if ($_GET['submit'] === 'registrar_c') {
-    $comentario = filtrado($_GET['coment']);
+if(isset($_POST['submit'])){
+    if ($_POST['submit'] === 'registrar_c') {
+    $comentario = filtrado($_POST['coment']);
     
 
     $valido = test_comentario($comentario);
@@ -49,7 +49,10 @@ if ($_GET['submit'] === 'registrar_c') {
     }else{
         $_SESSION['ERR_C']='El comentario es demasiado corto o has puesto caracteres invalidos. Solo se permiten Letras, nºs ,.; ';
     }
-     header('Location: index.php?submit=login');
+    $_POST['submit']='login';
+     header('Location: index.php');
+}
+
 }
 
 

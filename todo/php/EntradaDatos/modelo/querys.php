@@ -109,8 +109,3 @@ function insert_comentario($comentario) {
     return $q->execute($datos);
 }
 
-//insert_comentario('Usama tiene autismo', '2017-05-20');
-//select_comentarios();
-//select_usuarios('49039275E');
-//select_usuarios('49039275G');
-//insert_usuario('49099575G', 'rafa', '6112001699', '1234', '2015-05-10', 'M', 'sucorreo@gmail.com');
