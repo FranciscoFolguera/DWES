@@ -35,7 +35,7 @@ function muestra_tabla() {
     echo"</table>";
 }
 if(isset($_POST['submit'])){
-    if ($_POST['submit'] === 'registrar_c') {
+    if (strcmp($_POST['submit'], 'registrar_c') === 0) {
     $comentario = filtrado($_POST['coment']);
     
 

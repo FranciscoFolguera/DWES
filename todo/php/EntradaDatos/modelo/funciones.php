@@ -24,3 +24,11 @@ function test_comentario($coment) {
     }
     return false;
 }
+
+function hash_fc($password) {
+    return password_hash($password, PASSWORD_DEFAULT, ['cost' => 15]);
+}
+
+function verify_fc($password, $hash) {
+    return password_verify($password, $hash);
+}

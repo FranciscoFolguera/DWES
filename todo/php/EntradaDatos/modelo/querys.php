@@ -7,10 +7,10 @@ define("LOGIN", 32);
 define("ERROR_SI_EXISTE", -1);
 define("ERROR_NO_EXISTE", 'ERROR! Ese usuario no existe');
 
-define("ERROR_PASSWORD", 'ERROR! Contraseña o DNI incorrecto');
+define("ERROR_PASSWORD", 'ERROR! Contraseña incorrecta');
 define("ERROR_SENTENCIA", -3);
 
-function accede_usuario($dni,$password) {
+function accede_usuario($dni, $password) {
 
     $conBD = Singleton::singleton();
 
@@ -24,13 +24,18 @@ function accede_usuario($dni,$password) {
     $user = $q->fetch();
 
     if (($user)) {
-        $datos2 = array(':par1' => $dni, ':par2' => $password);
-        $sql = ' SELECT * FROM login WHERE dni=:par1 and password=:par2';
-        $qu = $conBD->obtenerConex()->prepare($sql);
-        $qu->execute($datos2);
-        $user = $qu->fetch();
-        if(!$user){
-            $valor=ERROR_PASSWORD;
+        $datos3 = array(':par1' => $dni);
+        $sql2 = 'SELECT password FROM login where dni=:par1';
+        $query = $conBD->obtenerConex()->prepare($sql2);
+        $query->execute($datos3);
+        $hash = $query->fetch();
+      
+        if ($hash) {
+           
+            
+            if (!verify_fc($password, $hash[0])) {
+                $valor = ERROR_PASSWORD;
+            }
         }
     } else {
         $valor = ERROR_NO_EXISTE;
@@ -108,4 +113,3 @@ function insert_comentario($comentario) {
     $q = $conBD->obtenerConex()->prepare($sql);
     return $q->execute($datos);
 }
-
