@@ -108,8 +108,7 @@ function insert_comentario($comentario) {
 
     $hoy = date("Y-m-d");
     $datos = array(':par1' => $comentario, ':par2' => $hoy);
-    $sql = ' INSERT INTO comentarios (comentario,fecha)
-                                        VALUES ( :par1 , :par2) ';
+    $sql = ' INSERT INTO comentarios (comentario,fecha)VALUES ( :par1 , :par2) ';
     $q = $conBD->obtenerConex()->prepare($sql);
     return $q->execute($datos);
 }

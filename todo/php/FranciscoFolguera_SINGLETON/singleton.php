@@ -42,20 +42,7 @@ class Singleton {
         }
     }
 
-    public function invitados() {
-              $this->filas=null;
-
-        $query = $this->ldb->prepare("SELECT * FROM invitados");
-        $query->setFetchMode(PDO::FETCH_ASSOC);
-        $query->execute();
-        if ($query->rowCount() > 0) {
-            while ($row = $query->fetch()) {
-                $this->filas[] = $row;
-            }
-            return $this->filas;
-        }
-    }
-
+    
     public function muestra($rows) {
 
         try {

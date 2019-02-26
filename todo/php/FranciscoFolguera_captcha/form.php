@@ -1,8 +1,7 @@
 <html>
     <head>
-       <title>Captcha</title>	
-        <meta name="author" content="Francisco Folguera ">
         <meta charset="UTF-8">
+        <title></title>
     </head>
     <body>
         <?php
