@@ -21,13 +21,12 @@ if (!isset($_POST['submit'])) {
     ?>
     <form action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]); ?>" method="POST">
         DNI: <input type="text" name="dni" ><br>
-        Password: <input type="password" name="password" ><br>
+        Password: <input type="password" name="password" required="required"><br>
 
         <input type="submit" name="submit" value="login">
 
         <input type="submit" name="submit" value="registrar">
     </form>
-
     <?php
 } else {
 

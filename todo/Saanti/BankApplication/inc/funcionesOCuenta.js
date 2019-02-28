@@ -27,44 +27,96 @@ window.onload = function () {
 
 
 };
+function comporbarNcuentaExist() {
+   
+        alert('Entro en el if');
+        var n_c = document.getElementById("nCuenta").value;
 
-function comporbarClienteExist() {
+        var url = "http://localhost/GitDWES/todo/Saanti/BankApplication/modelo/dao/CuentaDAO.php?";
+        $.ajax({
+            url: url,
+            type: 'GET',
+            dataType: 'json',
+            data: {comprobar_cuenta: n_c},
+            success: function (data) {
 
-    var dni = document.getElementById("inputDNI1").value;
+                alert(data.datos);
+                datosC = data.datos;
+                console.log(data.datos);
+                if (data.datos === "vacio") {
+                    habilitaNuevoCliente();
 
-    var url = "http://localhost/GitDWES/todo/Saanti/BankApplication/modelo/dao/ClienteDAO.php?";
-    $.ajax({
-        url: url,
-        type: 'GET',
-        dataType: 'json',
-        data: {iduser: dni},
-        success: function (data) {
-
-            alert(data.datos);
-            datosC = data.datos;
-            console.log(data.datos);
-            if (data.datos === "vacio") {
-                habilitaNuevoCliente();
-
-            } else {
-                var x;
-                text = "";
-                habilitaTabla();
-                for (x in data.datos) {
-                    text += data.datos[x] + " ";
+                } else {
+                    var x;
+                    text = "";
+                    habilitaTabla();
+                    for (x in data.datos) {
+                        text += data.datos[x] + " ";
+                    }
+                    deshabilitaNuevoCliente();
+                    alert(text);
                 }
-                deshabilitaNuevoCliente();
-                alert(text);
+
+
+
+            },
+            error: function () {
+                alert('Error!');
+
             }
+        });
+    
+
+
+}
+function comporbarClienteExist() {
+    var cok = ComprobarNcuenta();
+    alert('holaaaaaaaaaaaaaa');
+    console.log(cok);
+    if (cok === true) {
+        alert('Entro en el if');
+        var dni = document.getElementById("inputDNI1").value;
+
+        var url = "http://localhost/GitDWES/todo/Saanti/BankApplication/modelo/dao/ClienteDAO.php?";
+        $.ajax({
+            url: url,
+            type: 'GET',
+            dataType: 'json',
+            data: {iduser: dni},
+            success: function (data) {
+
+                alert(data.datos);
+                datosC = data.datos;
+                console.log(data.datos);
+                if (data.datos === "vacio") {
+                    habilitaNuevoCliente();
+
+                } else {
+                    var x;
+                    text = "";
+                    habilitaTabla();
+                    for (x in data.datos) {
+                        text += data.datos[x] + " ";
+                    }
+                    deshabilitaNuevoCliente();
+                    alert(text);
+                }
 
 
 
-        },
-        error: function () {
-            alert('Error!');
+            },
+            error: function () {
+                alert('Error!');
 
-        }
-    });
+            }
+        });
+    } else {
+        alert('Entro en else');
+        document.getElementById("div_err").style.display = "block";
+        document.getElementById("div_err").innerHTML = "Ese nº de cuenta no es valido";
+    }
+
+
 }
 
 function ComprobarDNI1() {
@@ -93,7 +145,7 @@ function ComprobarImporte() {
 }
 function ComprobarNcuenta() {
     var ok = false;
-
+    alert('Estoy en el comprobar cuenta');
 
     var nCuenta = document.getElementById("nCuenta").value;
     var cadena = nCuenta.toString();

@@ -1,4 +1,4 @@
-
+<div id="div_err" style="display: none"></div>
 <table class="table table-striped" style="display: none" id="tc1">
 
     <tbody>
@@ -88,7 +88,7 @@
         </div>
     </div>
 
-    Nº de cuenta    <input type="text" name="nCuenta" placeholder="0000000033"><br>
+    Nº de cuenta    <input type="text" name="nCuenta" placeholder="0000000033" id="nCuenta"><br>
 
     <div style="display: none"> Nombre          <input type="text" name="name1" id="nameeeesdsdee" placeholder="Pedro" ></div>
     Direccion       <input type="text" name="location1" id="location1" placeholder="Calle Betanzos"><br>

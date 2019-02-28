@@ -2,9 +2,9 @@
 
 
 
-$imagen= imagecreate(300, 30); // ancho x alto
+$imagen= imagecreate(30, 30); // ancho x alto
 // establece color de fondo
-$fondo= imagecolorallocate($imagen,0,255,255);
+$fondo= imagecolorallocate($imagen,0,150,150);
 // envía imagen tras la cabecera
 header("Content-type: image/png");
 imagepng($imagen);
