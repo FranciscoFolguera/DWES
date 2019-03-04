@@ -25,13 +25,11 @@ function cargarEventosMovi() {
 
 }
 function realizarMovimineto() {
-    alert('Dentro de la fc');
     var check_dni = ComprobarConcepto();
-        alert('Despues');
+       
 
     var check_im = document.getElementById("f_impore").value;
     var div = document.getElementById("err");
-console.log(check_im);
     if (!check_dni && (check_im === 0)) {
         var err = "El importe tiene que ser distinto de 0 y el concepto tiene que tener 10 carac. minimo";
         mensajeErr(div, err);
@@ -39,17 +37,16 @@ console.log(check_im);
          var err = "El concepto tiene que tener 10 carac. minimo";
         mensajeErr(div, err);
         
-    }else if (check_im===0) {
+    }else if (check_im===0||check_im==="") {
          var err = "El importe tiene que ser distinto de 0";
         mensajeErr(div, err);
     }else{
-        var confor=conforidadMov(check_im);
-        alert(confor);
+        var confor=conformidadMov(check_im);
         div.style.display = "none";
     }
 
 }
-function conforidadMov(check_im) {
+function conformidadMov(check_im) {
     var conforme=false;
   var txt;
   if (confirm("Se va a realizar un movimiento de "+check_im)) {
@@ -64,7 +61,6 @@ function conforidadMov(check_im) {
 function comporbarNcuentaExist() {
 
     var n_c = document.getElementById("nCuenta").value;
-    alert('He entrado el f' + n_c);
     var url = "http://localhost/GitDWES/todo/Saanti/BankApplication/modelo/dao/CuentaDAO.php?";
     $.ajax({
         url: url,

@@ -1,7 +1,9 @@
 <?php
 
-    include_once '../modelo/conexion/conexion.php';
-    include_once '../modelo/clases/Movimiento.php';
+include_once '../modelo/conexion/conexion.php';
+include_once '../modelo/clases/Movimiento.php';
+include_once '../modelo/clases/Cuenta.php';
+
 //include_once '../conexion/conexion.php';
 //include_once '../../modelo/clases/Movimiento.php';
 
@@ -80,4 +82,27 @@ function muestra($rows) {
     } catch (PDOException $ex) {
         echo("No se ha podido realizar esa consulta: " . $ex->getMessage() . "<br/>");
     }
+}
+
+function insertMovimiento(Cuenta $cuenta, $importe, $concepto) {
+    $connection = new conectaBD('banco');
+    $mo_ncu = $cuenta->getMo_ncu();
+    $importe_viejo = $cuenta->getCu_salario();
+    $importe += $importe_viejo;
+    // creamos una bandera
+    $result_transaccion = true;
+
+// iniciamos transacción 
+    $connection->obtenerConex()->begin_transaction(MYSQLI_TRANS_START_READ_WRITE);
+
+
+    $datos1 = array(':par1' => $mo_ncu, ':par2' => $importe);
+    $sql = "UPDATE cuentas set cu_salario=:par2 where cu_ncu=:par1";
+    $q1 = $connection->obtenerConex()->prepare($sql);
+
+    if (!$q1->execute($datos1)) {
+        $result_transaccion = false;
+    }
+    
+    
 }
