@@ -1,30 +1,40 @@
 document.addEventListener("readystatechange", cargarEventosMovi, false);
+
 window.onload = function () {
     $('#bEnviar').click(function () {
 
         var url = "http://localhost/GitDWES/todo/Saanti/BankApplication/vista/movimiento.php?";
-            
         $.ajax({
             type: "POST",
             url: url,
 
             data: $("#form").serialize(),
-           success: function (data)
+            success: function (data)
             {
                 $('#resp').html(data);
             }
 
         });
-        
 
     });
+    n = new Date();
+    y = n.getFullYear();
+    m = n.getMonth() + 1;
+    d = n.getDate();
+    document.getElementById("inputFechaA1").innerHTML = d + "-" + m + "-" + y;
+
+
 };
+
+
 function cargarEventosMovi() {
     //alert(document.readyState);
     if (document.readyState === "complete") {
-        // document.getElementById("priMovi").addEventListener("click", habilitaEnvioMov);
-        // document.getElementById("lastMovi").addEventListener("click", habilitaEnvioMov);
-        document.getElementById("bCuenta").addEventListener("click", habilitaEnvioMov);
+        // deshabilitaEnvioMov();
+
+        document.getElementById("bCuenta").addEventListener("click", ComprobarNcuenta);
+
+
 
 
     }
@@ -32,9 +42,9 @@ function cargarEventosMovi() {
 }
 
 
+
 function ComprobarNcuenta() {
     var ok = false;
-
 
     var nCuenta = document.getElementById("nCuenta").value;
     var cadena = nCuenta.toString();
@@ -48,13 +58,19 @@ function ComprobarNcuenta() {
     }
 
     var resto = suma % 9;
+    var div = document.getElementById("err");
 
     if (resto === ultNum) {
-        cargarEventosMovi();
+        //cargarEventosMovi();
+        div.style.display = "none";
+        habilitaEnvioMov();
         ok = true;
     } else {
-    }
 
+
+        var err = "Nº de cuenta incorrecto";
+        mensajeErr(div, err);
+    }
     return ok;
 }
 function ComprobarFecha() {
@@ -93,26 +109,14 @@ function habilitaEnvioMov() {
     document.getElementById("bEnviar").disabled = false;
 
 }
+function deshabilitaEnvioMov() {
+    document.getElementById("priMovi").disabled = true;
+    document.getElementById("lastMovi").disabled = true;
+    document.getElementById("bEnviar").disabled = true;
 
-function enviarForm() {
-    // document.getElementById("form").submit();
-    /*
-     
-     $('#bEnviar').click(function(){
-     alert("pene");
-     var url = "http://localhost/GitDWES/todo/Saanti/BankApplication/vista/movimiento.php?";
-     $.ajax({                        
-     type: "POST",                 
-     url: url,                     
-     data: $("#form").serialize(), 
-     success: function(data)             
-     {
-     $('#resp').html(data);               
-     }
-     
-     });
-     alert('hola 1');
-     });
-     alert('hola 222');
-     */
+}
+function mensajeErr(div, err) {
+    div.style.display = "block";
+    div.style.color = "red";
+    div.innerHTML = err;
 }

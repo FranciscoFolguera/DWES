@@ -28,44 +28,35 @@ window.onload = function () {
 
 };
 function comporbarNcuentaExist() {
-   
-        alert('Entro en el if');
-        var n_c = document.getElementById("nCuenta").value;
+    var ret = false;
 
-        var url = "http://localhost/GitDWES/todo/Saanti/BankApplication/modelo/dao/CuentaDAO.php?";
-        $.ajax({
-            url: url,
-            type: 'GET',
-            dataType: 'json',
-            data: {comprobar_cuenta: n_c},
-            success: function (data) {
+    var n_c = document.getElementById("inputNcuenta").value;
 
-                alert(data.datos);
-                datosC = data.datos;
-                console.log(data.datos);
-                if (data.datos === "vacio") {
-                    habilitaNuevoCliente();
+    var url = "http://localhost/GitDWES/todo/Saanti/BankApplication/modelo/dao/CuentaDAO.php?";
+    $.ajax({
+        url: url,
+        type: 'GET',
+        dataType: 'json',
+        data: {comprobar_cuenta: n_c},
+        success: function (data) {
 
-                } else {
-                    var x;
-                    text = "";
-                    habilitaTabla();
-                    for (x in data.datos) {
-                        text += data.datos[x] + " ";
-                    }
-                    deshabilitaNuevoCliente();
-                    alert(text);
-                }
-
-
-
-            },
-            error: function () {
-                alert('Error!');
-
+            if (data.datos[0]) {
+                ret = true;
+                console.log(data.datos[0]);
             }
-        });
-    
+
+
+
+
+        },
+        error: function () {
+            alert('Error exist cuenta!');
+           
+
+        }
+    });
+    return ret;
+
 
 
 }
@@ -74,6 +65,10 @@ function comporbarClienteExist() {
     alert('holaaaaaaaaaaaaaa');
     console.log(cok);
     if (cok === true) {
+        var c_exist = comporbarNcuentaExist();
+        console.log(c_exist);
+        alert('estoy despues de n-_exist');
+        alert(c_exist);
         alert('Entro en el if');
         var dni = document.getElementById("inputDNI1").value;
 
@@ -127,10 +122,7 @@ function ComprobarDNI1() {
     if (expreg.test(dni) === true) {
 
         valido = true;
-    } else {
-
-
-    }
+    } 
     return valido;
 }
 
@@ -145,9 +137,9 @@ function ComprobarImporte() {
 }
 function ComprobarNcuenta() {
     var ok = false;
-    alert('Estoy en el comprobar cuenta');
 
-    var nCuenta = document.getElementById("nCuenta").value;
+    var nCuenta = document.getElementById("inputNcuenta").value;
+    alert(nCuenta);
     var cadena = nCuenta.toString();
     var miniCadena = cadena.substring(0, 9);
     var ultNum = parseInt(cadena.substring(9, 10));
@@ -161,11 +153,9 @@ function ComprobarNcuenta() {
     var resto = suma % 9;
 
     if (resto === ultNum) {
-        cargarEventosMovi();
+        // cargarEventosMovi();
         ok = true;
-    } else {
     }
-
     return ok;
 }
 function cargarEventosOCuenta() {

@@ -88,7 +88,7 @@
         </div>
     </div>
 
-    Nº de cuenta    <input type="text" name="nCuenta" placeholder="0000000033" id="nCuenta"><br>
+
 
     <div style="display: none"> Nombre          <input type="text" name="name1" id="nameeeesdsdee" placeholder="Pedro" ></div>
     Direccion       <input type="text" name="location1" id="location1" placeholder="Calle Betanzos"><br>

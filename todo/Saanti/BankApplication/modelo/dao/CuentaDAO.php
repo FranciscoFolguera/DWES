@@ -1,7 +1,8 @@
 <?php
+//http://localhost/GitDWES/todo/Saanti/BankApplication/modelo/dao/CuentaDAO.php?select_cuenta=0000000022
+include_once '../../modelo/conexion/conexion.php';
+include_once '../../modelo/clases/Cuenta.php';
 
-include_once '../modelo/conexion/conexion.php';
-include_once '../modelo/clases/Cuenta.php';
 //include_once '../clases/Cuenta.php';
 //include_once '../conexion/conexion.php';
 
@@ -35,4 +36,17 @@ if (isset($_GET['comprobar_cuenta'])) {
     $objeto = json_encode($asdasd);
     //print_r($objeto);
     echo $objeto;
+}
+if (isset($_GET['select_cuenta'])) {
+    $nCuenta = $_GET['select_cuenta'];
+    
+    $filas = selectCuenta($nCuenta);
+    $asdasd = new stdClass();
+    $asdasd->datos = $filas;
+    $objeto = json_encode($asdasd);
+    
+//    
+      header('Content-type: application/json; charset=utf-8');
+echo $objeto;
+//    echo '{"firstName":"John", "lastName":"Doe"}';
 }
