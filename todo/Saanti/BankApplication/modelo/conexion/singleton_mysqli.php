@@ -7,7 +7,7 @@ class Singleton {
     private $_host = "localhost";
     private $_username = "root";
     private $_password = "1234";
-    private $_database = "banco";
+    private $_database = "dwes";
 
     /*
       Get an instance of the Database

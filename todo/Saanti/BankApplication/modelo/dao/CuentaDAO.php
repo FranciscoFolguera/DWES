@@ -13,13 +13,13 @@ function selectCuenta($cu_ncu) {
 
 
     $datos = array(':par1' => $cu_ncu);
-    $sql = ' SELECT cu_ncu FROM cuentas WHERE cu_ncu=:par1';
+    $sql = ' SELECT cu_ncu,cu_salario,cu_dni1,cu_dni2 FROM cuentas WHERE cu_ncu=:par1';
     $q = $connection->obtenerConex()->prepare($sql);
 
     if (!$q->execute($datos)) {
         return -1;
     }
-    $q->setFetchMode(PDO::FETCH_ASSOC);
+    $q->setFetchMode();
     $rows = array();
     $rows = $q->fetchAll();
 

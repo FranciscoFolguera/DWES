@@ -1,8 +1,9 @@
 <?php
 
-include_once '../modelo/conexion/conexion.php';
-include_once '../modelo/clases/Movimiento.php';
-include_once '../modelo/clases/Cuenta.php';
+//include_once '../modelo/conexion/singleton_mysqli.php';
+include_once '../clases/Movimiento.php';
+include_once '../clases/Cuenta.php';
+include_once '../../inc/func_ser_movi.php';
 
 //include_once '../conexion/conexion.php';
 //include_once '../../modelo/clases/Movimiento.php';
@@ -26,9 +27,6 @@ function selectTododMovimientos() {
 
 function selectMovimientos(Movimiento $movimiento, $fechaInicial, $fechaFinal) {
 
-
-    //include_once '../modelo/clases/Movimiento.php';
-    //include_once '../conexion/conexion.php';
     $connection = new conectaBD('banco');
     //$movimiento = new Movimiento();
     $mo_ncu = $movimiento->getMo_ncu();
@@ -85,24 +83,96 @@ function muestra($rows) {
 }
 
 function insertMovimiento(Cuenta $cuenta, $importe, $concepto) {
+include_once '../conexion/conexion.php';
+    $mo_ncu = $cuenta->getCu_ncu();
+
     $connection = new conectaBD('banco');
-    $mo_ncu = $cuenta->getMo_ncu();
-    $importe_viejo = $cuenta->getCu_salario();
-    $importe += $importe_viejo;
+    $err = "";
+
+    //$importe_viejo = $cuenta->getCu_salario();
+    $dni1 = $cuenta->getCu_dni1();
+    $dni2 = $cuenta->getCu_dni2();
+
+    // $importe += $importe_viejo;
     // creamos una bandera
     $result_transaccion = true;
 
 // iniciamos transacción 
-    $connection->obtenerConex()->begin_transaction(MYSQLI_TRANS_START_READ_WRITE);
-
+    $connection->obtenerConex()->setAttribute(PDO::ATTR_AUTOCOMMIT, 0);
+    $connection->obtenerConex()->beginTransaction();
+    $hoy = date("Y-m-d");
+    $hourMin = date('H:i:s');
 
     $datos1 = array(':par1' => $mo_ncu, ':par2' => $importe);
-    $sql = "UPDATE cuentas set cu_salario=:par2 where cu_ncu=:par1";
+    $sql = "UPDATE cuentas set cu_salario=(cu_salario+:par2) where cu_ncu=:par1";
     $q1 = $connection->obtenerConex()->prepare($sql);
 
     if (!$q1->execute($datos1)) {
+        $err = 'Error al cambiar el salario de la cuenta';
         $result_transaccion = false;
     }
-    
-    
+
+    $datos2 = array(':par1' => $dni1, ':par2' => $importe);
+    $sql2 = "UPDATE clientes set cl_salario=(cl_salario+:par2) where cl_dni=:par1";
+    $q2 = $connection->obtenerConex()->prepare($sql2);
+
+    if (!$q2->execute($datos2)) {
+        $err = 'Error al cambiar el salario del cliente1';
+        $result_transaccion = false;
+    }
+
+    if ($dni2 != null) {
+        $datos2 = array(':par1' => $dni2, ':par2' => $importe);
+        $sql2 = "UPDATE clientes set cl_salario=(cl_salario+:par2) where cl_dni=:par1";
+        $q2 = $connection->obtenerConex()->prepare($sql2);
+
+        if (!$q2->execute($datos2)) {
+            $err = 'Error al cambiar el salario del cliente2';
+
+            $result_transaccion = false;
+        }
+    }
+
+
+
+
+    $datos3 = array(':par1' => $mo_ncu, ':par2' => $hoy, ':par3' => $hourMin, ':par4' => $concepto, ':par5' => $importe);
+    $sql3 = "INSERT into movimientos VALUES(:par1,:par2,:par3,:par4,:par5)";
+    $q3 = $connection->obtenerConex()->prepare($sql3);
+
+    if (!$q3->execute($datos3)) {
+        $err = 'Error al cambiar al registrar el movimiento';
+        $result_transaccion = false;
+    }
+
+    if ($result_transaccion === true) {
+        $err = 'Operación realizada con exito';
+        $connection->obtenerConex()->commit();
+    } else {
+
+        $connection->obtenerConex()->rollback();
+    }
+
+
+    return $err;
+}
+
+if (isset($_GET['nCuenta'])) {
+    $mo_ncu= $_GET['nCuenta'];
+    if (valida_n_cuenta($mo_ncu)) {
+        $cu_dni1 = $_GET['dni1'];
+        $cu_dni2 = $_GET['dni2'];
+        $importe = $_GET['importe'];
+        $concepto = $_GET['concepto'];
+        $cuenta = new Cuenta($mo_ncu, $cu_dni1, $cu_dni2);
+       $err= insertMovimiento($cuenta, $importe, $concepto);
+    } else {
+        $err = "Nº de cuenta incorrecto";
+    }
+    $asdasd = new stdClass();
+    $asdasd->datos = $err;
+    //  print_r($asdasd);
+    $objeto = json_encode($asdasd);
+    //print_r($objeto);
+    echo $objeto;
 }
