@@ -35,7 +35,7 @@
     </tbody>
 </table>
 
-<form action=<?php echo htmlspecialchars($_SERVER["PHP_SELF"]); ?> method="POST" onsubmit="return ComprobarDNI1()" id="form">
+<form  method="POST" onsubmit="return ComprobarDNI1()" id="form">
     <div class="form-row">
         <div class="form-group col-md-4">
             <label for="inputNcuenta">Nº de cuenta</label>

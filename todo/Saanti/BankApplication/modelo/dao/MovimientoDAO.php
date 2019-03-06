@@ -4,12 +4,12 @@
 include_once '../clases/Movimiento.php';
 include_once '../clases/Cuenta.php';
 include_once '../../inc/func_ser_movi.php';
+    include_once '../conexion/conexion.php';
 
 //include_once '../conexion/conexion.php';
 //include_once '../../modelo/clases/Movimiento.php';
 
 function selectTododMovimientos() {
-    include_once '../modelo/conexion/conexion.php';
     $connection = new conectaBD('banco');
     try {
         $select = 'SELECT * FROM movimientos';
@@ -50,10 +50,14 @@ function selectMovimientos(Movimiento $movimiento, $fechaInicial, $fechaFinal) {
         $rows = array();
         $q->setFetchMode(PDO::FETCH_ASSOC);
         $rows = $q->fetchAll();
-        return $rows;
+        if (count($rows) > 0) {
+            return $rows;
+        } else {
+            return "No hay movimientos entre esas fechas para ese Nº de cuenta";
+        }
     } else {
 
-        return $fallos;
+        return "No existe ese numero de cuenta";
     }
 }
 
@@ -83,7 +87,6 @@ function muestra($rows) {
 }
 
 function insertMovimiento(Cuenta $cuenta, $importe, $concepto) {
-include_once '../conexion/conexion.php';
     $mo_ncu = $cuenta->getCu_ncu();
 
     $connection = new conectaBD('banco');
@@ -157,15 +160,36 @@ include_once '../conexion/conexion.php';
     return $err;
 }
 
+if ($_POST['select_movi']) {
+    $mo_ncu = $_POST['nCuenta'];
+    $fechaInicial = $_POST['priMovi'];
+    $fechaFinal = $_POST['lastMovi'];
+
+    if (valida_n_cuenta($mo_ncu)) {
+
+        $movimiento = new Movimiento($mo_ncu);
+        $err = selectMovimientos($movimiento, $fechaInicial, $fechaFinal);
+    } else {
+        $err = "Nº de cuenta incorrecto";
+    }
+
+    $asdasd = new stdClass();
+    $asdasd->datos = $err;
+    //  print_r($asdasd);
+    $objeto = json_encode($asdasd);
+    //print_r($objeto);
+    echo $objeto;
+}
+
 if (isset($_GET['nCuenta'])) {
-    $mo_ncu= $_GET['nCuenta'];
+    $mo_ncu = $_GET['nCuenta'];
     if (valida_n_cuenta($mo_ncu)) {
         $cu_dni1 = $_GET['dni1'];
         $cu_dni2 = $_GET['dni2'];
         $importe = $_GET['importe'];
         $concepto = $_GET['concepto'];
         $cuenta = new Cuenta($mo_ncu, $cu_dni1, $cu_dni2);
-       $err= insertMovimiento($cuenta, $importe, $concepto);
+        $err = insertMovimiento($cuenta, $importe, $concepto);
     } else {
         $err = "Nº de cuenta incorrecto";
     }

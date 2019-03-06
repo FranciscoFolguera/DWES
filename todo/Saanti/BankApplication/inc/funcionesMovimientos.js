@@ -1,38 +1,43 @@
 document.addEventListener("readystatechange", cargarEventosMovi, false);
 
-window.onload = function () {
-    $('#bEnviar').click(function () {
 
-        var url = "http://localhost/GitDWES/todo/Saanti/BankApplication/vista/movimiento.php?";
-        $.ajax({
-            type: "POST",
-            url: url,
-
-            data: $("#form").serialize(),
-            success: function (data)
-            {
-                $('#resp').html(data);
+function cogerMovi() {
+    var url = "http://localhost/GitDWES/todo/Saanti/BankApplication/modelo/dao/MovimientoDAO.php?";
+    var f_nc = document.getElementById("nCuenta").value;
+    var f_priMovi = document.getElementById("priMovi").value;
+    var f_lastMovi = document.getElementById("lastMovi").value;
+    $.ajax({
+        type: "POST",
+        url: url,
+dataType:'json',
+        data: {select_movi: 1, nCuenta: f_nc, priMovi: f_priMovi, lastMovi: f_lastMovi},
+        success: function (data)
+        {
+          
+            if(Array.isArray(data.datos)){
+                muestra_t_cliente2(data.datos);
+            }else{
+                var div= document.getElementById("err");
+                var err=data.datos;
+                mensajeErr(div,err);
             }
-
-        });
+        }
 
     });
-    n = new Date();
-    y = n.getFullYear();
-    m = n.getMonth() + 1;
-    d = n.getDate();
-    document.getElementById("inputFechaA1").innerHTML = d + "-" + m + "-" + y;
-
-
-};
+}
 
 
 function cargarEventosMovi() {
     //alert(document.readyState);
     if (document.readyState === "complete") {
         // deshabilitaEnvioMov();
-
+        n = new Date();
+        y = n.getFullYear();
+        m = n.getMonth() + 1;
+        d = n.getDate();
+        document.getElementById("lastMovi").innerHTML = d + "/" + m + "/" + y;
         document.getElementById("bCuenta").addEventListener("click", ComprobarNcuenta);
+        document.getElementById("bEnviar").addEventListener("click", cogerMovi);
 
 
 
@@ -41,7 +46,22 @@ function cargarEventosMovi() {
 
 }
 
+function muestra_t_cliente2(data) {
+    var tableReg = document.getElementById('table_movi');
+    tableReg.style.display = "block";
+    var cellsOfRow = "";
+    var found = false;
+    for (var i = 1; i < tableReg.rows.length; i++) {
+        cellsOfRow = tableReg.rows[i].getElementsByTagName('td');
+        found = false;
+        // Recorremos todas las celdas
+        for (var j = 0; j < cellsOfRow.length && !found; j++) {
+            cellsOfRow[j].innerHTML = lista_cliente_2[j];
 
+        }
+
+    }
+}
 
 function ComprobarNcuenta() {
     var ok = false;

@@ -1,6 +1,6 @@
 <?php
 
-include_once '../inc/headerVista.php';
+include_once '../inc/headerMovimientos.html';
 include_once '../inc/func_ser_movi.php';
 
 if (!isset($_POST['nCuenta'])) {

@@ -1,6 +1,6 @@
 <?php
 
-    include_once '../inc/headerIngresos.php';
+    include_once '../inc/headerIngresos.html';
 
 
     include '../inc/formIngresos.php';

@@ -3,9 +3,115 @@
 //http://localhost/GitDWES/todo/Saanti/BankApplication/modelo/dao/CuentaDAO.php?select_cuenta=0000000022
 include_once '../../modelo/conexion/conexion.php';
 include_once '../../modelo/clases/Cuenta.php';
+include_once '../../inc/func_ser_movi.php';
 
 //include_once '../clases/Cuenta.php';
 //include_once '../conexion/conexion.php';
+function deleteCuenta(Cuenta $cuenta, $ncuenta_c1, $ncuenta_c2) {
+    $n_cuenta = $cuenta->getCu_ncu();
+    $c_salario = $cuenta->getCu_salario();
+
+
+    $connection = new conectaBD('banco');
+    $err = "";
+
+    //$importe_viejo = $cuenta->getCu_salario();
+    $dni1 = $cuenta->getCu_dni1();
+    $dni2 = $cuenta->getCu_dni2();
+
+    // $importe += $importe_viejo;
+    // creamos una bandera
+    $result_transaccion = true;
+
+// iniciamos transacción 
+    $connection->obtenerConex()->setAttribute(PDO::ATTR_AUTOCOMMIT, 0);
+    $connection->obtenerConex()->beginTransaction();
+    $hoy = date("Y-m-d");
+    $hourMin = date('H:i:s');
+
+    $datos1 = array(':par1' => $n_cuenta);
+    $sql = "DELETE FROM cuentas where cu_ncu=:par1";
+    $q1 = $connection->obtenerConex()->prepare($sql);
+
+    if (!$q1->execute($datos1)) {
+        $err = 'Error al eleminar la cuenta';
+        $result_transaccion = false;
+    }
+
+    $datos2 = array(':par1' => $n_cuenta);
+    $sql2 = "DELETE FROM movimientos where mo_ncu=:par1";
+    $q2 = $connection->obtenerConex()->prepare($sql2);
+
+    if (!$q2->execute($datos2)) {
+        $err = 'Error al eleminar la cuenta de movimientos';
+        $result_transaccion = false;
+    }
+
+    if ($ncuenta_c1 === 1) {
+        $datos3 = array(':par1' => $dni1);
+        $sql3 = "DELETE FROM clientes  where cl_dni=:par1";
+        $q3 = $connection->obtenerConex()->prepare($sql3);
+
+        if (!$q3->execute($datos3)) {
+            $err = 'Error al cambiar el eliminar el cliente1';
+
+            $result_transaccion = false;
+        }
+    } else if ($ncuenta_c1 > 1) {
+        $datos3 = array(':par1' => $dni1);
+        $sql3 = "UPDATE clientes set  cl_ncuenta=(cl_ncuenta-1) where cl_dni=:par1";
+        $q3 = $connection->obtenerConex()->prepare($sql3);
+
+        if (!$q3->execute($datos3)) {
+            $err = 'Error al cambiar el nº del cliente1';
+
+            $result_transaccion = false;
+        }
+    }
+
+
+
+
+    if ($dni2 != null) {
+        if ($ncuenta_c2 === 1) {
+            $datos3 = array(':par1' => $dni2);
+            $sql3 = "DELTE FROM clientes  where cl_dni=:par1";
+            $q3 = $connection->obtenerConex()->prepare($sql3);
+
+            if (!$q3->execute($datos3)) {
+                $err = 'Error al cambiar el eliminar el cliente2';
+
+                $result_transaccion = false;
+            }
+        } else if ($ncuenta_c2 > 1) {
+            $datos3 = array(':par1' => $dni2);
+            $sql3 = "UPDATE clientes set  cl_ncuenta=(cl_ncuenta-1) where cl_dni=:par1";
+            $q3 = $connection->obtenerConex()->prepare($sql3);
+
+            if (!$q3->execute($datos3)) {
+                $err = 'Error al cambiar el nº del cliente2';
+
+                $result_transaccion = false;
+            }
+        }
+    }
+
+
+
+
+
+
+    if ($result_transaccion === true) {
+        $err = true;
+        $connection->obtenerConex()->commit();
+    } else {
+
+        $connection->obtenerConex()->rollback();
+    }
+
+
+    return $err;
+}
 
 function selectCuenta($cu_ncu) {
 
@@ -110,23 +216,22 @@ if (isset($_GET['select_cuenta_cliente'])) {
 
     $filas = select_Cuenta_Cliente($nCuenta);
 
-   
+
     $asdasd = new stdClass();
     if (count($filas) === 0) {
         $asdasd->cuenta = null;
         $asdasd->cliente1 = null;
         $asdasd->cliente2 = null;
     } else {
-        if (count($filas) === 2){
-              $asdasd->cuenta = $filas[0];
-        $asdasd->cliente1 = $filas[1];
-         $asdasd->cliente2 =null;
-        }else{
-             $asdasd->cuenta = $filas[0];
-        $asdasd->cliente1 = $filas[1];
-        $asdasd->cliente2 = $filas[2];
+        if (count($filas) === 2) {
+            $asdasd->cuenta = $filas[0];
+            $asdasd->cliente1 = $filas[1];
+            $asdasd->cliente2 = null;
+        } else {
+            $asdasd->cuenta = $filas[0];
+            $asdasd->cliente1 = $filas[1];
+            $asdasd->cliente2 = $filas[2];
         }
-       
     }
 
     $objeto = json_encode($asdasd);
@@ -135,4 +240,25 @@ if (isset($_GET['select_cuenta_cliente'])) {
     header('Content-type: application/json; charset=utf-8');
     echo $objeto;
 //    echo '{"firstName":"John", "lastName":"Doe"}';
+}
+
+if (isset($_GET['delete_cuenta'])) {
+    $mo_ncu = $_GET['delete_cuenta'];
+    if (valida_n_cuenta($mo_ncu)) {
+        $cu_dni1 = $_GET['dni1'];
+        $cu_dni2 = $_GET['dni2'];
+        $importe = $_GET['importe'];
+        $nc_cli1 = $_GET['nc_cli1'];
+        $nc_cli2 = $_GET['nc_cli2'];
+        $cuenta = new Cuenta($mo_ncu, $cu_dni1, $cu_dni2, $importe);
+        $err = deleteCuenta($cuenta,$nc_cli1,$nc_cli2);
+    } else {
+        $err = "Nº de cuenta incorrecto";
+    }
+    $asdasd = new stdClass();
+    $asdasd->datos = $err;
+    //  print_r($asdasd);
+    $objeto = json_encode($asdasd);
+    //print_r($objeto);
+    echo $objeto;
 }

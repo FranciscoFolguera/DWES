@@ -24,3 +24,4 @@ function valida_n_cuenta($ncuenta){
 
 
 
+//INSERT INTO `cuentas`(`cu_ncu`, `cu_dni1`, `cu_dni2`, `cu_salario`) VALUES ('0000000011','76543210B',null,2000)

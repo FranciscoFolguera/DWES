@@ -1,6 +1,6 @@
 <?php
 
-include_once '../inc/headerCCuenta.php';
+include_once '../inc/headerCCuenta.html';
 
 
 include '../inc/formCCuenta.php';

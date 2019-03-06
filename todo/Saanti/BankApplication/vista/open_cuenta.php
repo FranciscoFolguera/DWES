@@ -1,6 +1,6 @@
 <?php
 
-include_once '../inc/headerCuenta.php';
+include_once '../inc/headerCuenta.html';
 
 if (!isset($_POST['nCuenta'])) {
     include '../inc/formACuentas.php';

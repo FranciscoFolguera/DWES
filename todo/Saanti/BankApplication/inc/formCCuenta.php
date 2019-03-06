@@ -17,15 +17,15 @@
 
         </tr>
         <tr>
-            <td id="tcDNI1"></td>
-            <td id="tcNombre1"></td>
-            <td id="tcDirecc1"></td>
-            <td id="tcTelefono1"></td>
-            <td id="tcEmail1"></td>
-            <td id="tcBirthday1"></td>
-            <td id="tcApertura1"></td>
-            <td id="tcNCuentas1"></td>
-            <td id="tcSalario1"></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
 
 
            
@@ -52,15 +52,15 @@
 
         </tr>
         <tr>
-            <td id="tcDNI1"></td>
-            <td id="tcNombre1"></td>
-            <td id="tcDirecc1"></td>
-            <td id="tcTelefono1"></td>
-            <td id="tcEmail1"></td>
-            <td id="tcBirthday1"></td>
-            <td id="tcApertura1"></td>
-            <td id="tcNCuentas1"></td>
-            <td id="tcSalario1"></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
 
 
            
@@ -72,7 +72,7 @@
 
     <tbody>
         <tr>
-            <th colspan="9">Cuenta</th>
+            <th colspan="4">Cuenta</th>
         </tr>
         <tr>
             <th scope="row">Nº de cuenta</th>
@@ -83,10 +83,10 @@
         </tr>
         <tr>
            
-            <td id="t_c_numero"></td>
-            <td id="t_c_dni1"></td>
-            <td id="t_c_dni2"></td>
-            <td id="t_c_salario"></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
 
 
            
@@ -102,3 +102,4 @@
 </form>
 <button type="button"  id="bCuenta">Cerrar cuenta</button>
 <div id="err"></div>
+
