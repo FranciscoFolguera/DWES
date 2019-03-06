@@ -100,6 +100,6 @@
 
 
 </form>
-<button type="button"  id="bCuenta">Cerrar cuenta</button>
+<button type="button"  id="bCuenta" disabled="disabled">Cerrar cuenta</button>
 <div id="err"></div>
 

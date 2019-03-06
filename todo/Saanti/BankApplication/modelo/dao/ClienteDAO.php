@@ -1,5 +1,7 @@
 <?php
 
+include_once '../../modelo/conexion/conexion.php';
+include_once '../../modelo/clases/Cliente.php';
 if (isset($_GET['iduser'])) {
 
 
@@ -13,28 +15,22 @@ if (isset($_GET['iduser'])) {
 }
 
 function selectCliente($cl_dni) {
-    include_once '../../modelo/conexion/conexion.php';
-    include_once '../../modelo/clases/Cliente.php';
+
     $connection = new conectaBD('banco');
     //$movimiento = new Movimiento();
 
     $rows = array();
-    try {
 
 
-        $datos = array(':par1' => $cl_dni);
-        $sql = ' SELECT * FROM clientes WHERE cl_dni=:par1';
-        $q = $connection->obtenerConex()->prepare($sql);
-        $q->execute($datos);
 
-        $q->setFetchMode(PDO::FETCH_ASSOC);
-        $rows = $q->fetchAll();
-    } catch (Exception $ex) {
+    $datos = array(':par1' => $cl_dni);
+    $sql = ' SELECT * FROM clientes WHERE cl_dni=:par1';
+    $q = $connection->obtenerConex()->prepare($sql);
+    $q->execute($datos);
 
-        echo"todo mal";
-        echo("error al ejecutar la orden: " . $ex->getMessage());
-    }
-    // print_r($rows);
+    $q->setFetchMode();
+    $rows = $q->fetchAll();
+
     if (empty($rows)) {
         $rows = 'vacio';
 
@@ -93,10 +89,10 @@ function meterClientes() {
 if (isset($_GET['lista'])) {
 
     $resultado = meterClientes($_GET['lista']);
-    
-    $asdasd= new stdClass();
-    $asdasd->datos=$resultado;
-  //  print_r($asdasd);
+
+    $asdasd = new stdClass();
+    $asdasd->datos = $resultado;
+    //  print_r($asdasd);
     $objeto = json_encode($asdasd);
     //print_r($objeto);
     echo $objeto;

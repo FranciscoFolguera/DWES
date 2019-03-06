@@ -133,6 +133,29 @@ function selectCuenta($cu_ncu) {
     return $rows;
 }
 
+function check_num_cuenta($cu_ncu) {
+    $connection = new conectaBD('banco');
+
+
+
+    $datos = array(':par1' => $cu_ncu);
+    $sql = ' SELECT cu_ncu FROM cuentas WHERE cu_ncu=:par1';
+    $q = $connection->obtenerConex()->prepare($sql);
+
+    if (!$q->execute($datos)) {
+        return -1;
+    }
+    $q->setFetchMode();
+    $q->store_result();
+    if ($q->num_rows() > 0) {
+        $rows = 1;
+    } else {
+        $rows = 0;
+    }
+
+    return $rows;
+}
+
 function select_Cuenta_Cliente($cu_ncu) {
 
     $connection = new conectaBD('banco');
@@ -210,7 +233,30 @@ if (isset($_GET['select_cuenta'])) {
     echo $objeto;
 //    echo '{"firstName":"John", "lastName":"Doe"}';
 }
+if (isset($_GET['select_num_cuenta'])) {
+    $nCuenta = $_GET['select_num_cuenta'];
+    $asdasd = new stdClass();
 
+    if (valida_n_cuenta($nCuenta)) {
+        $filas = selectCuenta($nCuenta);
+        if (count($filas) > 0) {
+            $asdasd->datos = $filas;
+        } else {
+            $asdasd->datos = 1;
+        }
+    }else{
+        $asdasd->datos = 2;
+    }
+
+
+
+    $objeto = json_encode($asdasd);
+
+//    
+    header('Content-type: application/json; charset=utf-8');
+    echo $objeto;
+//    echo '{"firstName":"John", "lastName":"Doe"}';
+}
 if (isset($_GET['select_cuenta_cliente'])) {
     $nCuenta = $_GET['select_cuenta_cliente'];
 
@@ -251,7 +297,7 @@ if (isset($_GET['delete_cuenta'])) {
         $nc_cli1 = $_GET['nc_cli1'];
         $nc_cli2 = $_GET['nc_cli2'];
         $cuenta = new Cuenta($mo_ncu, $cu_dni1, $cu_dni2, $importe);
-        $err = deleteCuenta($cuenta,$nc_cli1,$nc_cli2);
+        $err = deleteCuenta($cuenta, $nc_cli1, $nc_cli2);
     } else {
         $err = "Nº de cuenta incorrecto";
     }

@@ -48,7 +48,7 @@ function selectMovimientos(Movimiento $movimiento, $fechaInicial, $fechaFinal) {
         $q = $connection->obtenerConex()->prepare($sql);
         $q->execute($datos);
         $rows = array();
-        $q->setFetchMode(PDO::FETCH_ASSOC);
+        $q->setFetchMode();
         $rows = $q->fetchAll();
         if (count($rows) > 0) {
             return $rows;

@@ -1,35 +1,36 @@
 var text = "Primero compruebe si existe el cliente";
-var datosC = "";
+var datos_cliente1 = "";
+var datos_cliente2 = "";
+
 var cliente1Inser = "";
+var nc_libre = false;
+var dni1_libre = false;
+var dni2_libre = false;
+var c_creada;
 document.addEventListener("readystatechange", cargarEventosOCuenta, false);
-window.onload = function () {
-    $('#bEnviar').click(function () {
+function cargarEventosOCuenta() {
+    if (document.readyState === "complete") {
 
-        var url = "http://localhost/GitDWES/todo/Saanti/BankApplication/vista/open_cuenta.php?";
-        $.ajax({
-            type: "POST",
-            url: url,
-
-            data: $("#form").serialize(),
-            success: function (data)
-            {
-                $('#resp').html(data);
-            }
-
-        });
-
-    });
-    n = new Date();
-    y = n.getFullYear();
-    m = n.getMonth() + 1;
-    d = n.getDate();
-    document.getElementById("inputFechaA1").innerHTML = d + "-" + m + "-" + y;
+        //document.getElementById("myCheck").addEventListener("click", habilitaNuevoCliente2);
+        document.getElementById("bEnviar").addEventListener("click", sawlGrabar);
+        document.getElementById("myCheck").addEventListener("click", habilitaNuevoCliente2);
+        document.getElementById("inputDNI2").addEventListener("change", habilitaNuevoCliente2);
+        document.getElementById("inputImporte").addEventListener("change", importe);
 
 
-};
+
+    }
+}
+function importe() {
+    var importe = parseInt(document.getElementById("inputImporte").value);
+    if (importe <= 0) {
+        document.getElementById("inputImporte").value = 1;
+    }
+
+}
+
 function comporbarNcuentaExist() {
-    var ret = false;
-
+    deshabilitaDivErr();
     var n_c = document.getElementById("inputNcuenta").value;
 
     var url = "http://localhost/GitDWES/todo/Saanti/BankApplication/modelo/dao/CuentaDAO.php?";
@@ -37,12 +38,18 @@ function comporbarNcuentaExist() {
         url: url,
         type: 'GET',
         dataType: 'json',
-        data: {comprobar_cuenta: n_c},
+        data: {select_num_cuenta: n_c},
+        asycn: false,
         success: function (data) {
-
+            console.log(data.datos);
             if (data.datos[0]) {
-                ret = true;
-                console.log(data.datos[0]);
+                /// console.log(data.datos[0]);
+                var div = document.getElementById("err");
+                var err = "Ese nº de cuenya ya esta en uso";
+                mensajeErr(div, err);
+            } else if (data.datos === 1) {
+                nc_libre = true;
+
             }
 
 
@@ -51,78 +58,208 @@ function comporbarNcuentaExist() {
         },
         error: function () {
             alert('Error exist cuenta!');
-           
+
 
         }
     });
-    return ret;
 
 
 
 }
+function sawlGrabar() {
+    var realizado = false;
+    // alert('yeeeeee');
+    swal({
+        title: "¿Desea crear esa cuenta?",
+        //text: "Una vez que lo borres no habrá vuelta atrás",
+        icon: "warning",
+        buttons: true,
+        dangerMode: true
+
+    })
+            .then((willDelete) => {
+                if (willDelete) {
+                    //  alert('heeeeeeee');
+                    console.log(c_creada);
+                    borrarCuenta();
+                    console.log(c_creada);
+                    if (c_creada === true) {
+                        swal("La cuenta ha sido borrada", {
+                            icon: "success",
+                        });
+                        realizado = true;
+                        deshabilitaTablas();
+                        deshabilitaDivErr();
+                    } else {
+                        swal("No se ha borrado:" + c_creada);
+                    }
+
+                } else {
+                    swal("Operación cancelada", {
+                        icon: "error", });
+                }
+            });
+    return realizado;
+
+}
+function checkNcuenta() {
+    var err = true;
+    if (nc_libre !== true) {
+        err = "Error con el numero de cuenta";
+    } else {
+
+    }
+    return err;
+}
+function validaCliente1() {
+    if (datos_cliente1 === false) {
+        datos_cliente1 = new Array();
+        datos_cliente1[0] = document.getElementById("inputDNI1").value;
+        datos_cliente1[1] = document.getElementById("inputNombre1").value;
+        datos_cliente1[2] = document.getElementById("inputLocation1").value;
+        datos_cliente1[3] = document.getElementById("inputTelefono1").value;
+        datos_cliente1[4] = document.getElementById("inputEmail1").value;
+        datos_cliente1[5] = document.getElementById("inputBirthday1").value;
+        datos_cliente1[6] = document.getElementById("inputFechaA1").value;
+        datos_cliente1[7] = 0;
+        datos_cliente1[8] = 0;
+
+
+    }
+}
 function comporbarClienteExist() {
     var cok = ComprobarNcuenta();
-    alert('holaaaaaaaaaaaaaa');
     console.log(cok);
     if (cok === true) {
         var c_exist = comporbarNcuentaExist();
-        console.log(c_exist);
-        alert('estoy despues de n-_exist');
-        alert(c_exist);
-        alert('Entro en el if');
-        var dni = document.getElementById("inputDNI1").value;
+        if (nc_libre) {
+            var dni = document.getElementById("inputDNI1").value;
+            dehabilata_tabla_c1();
+            if (ComprobarDNI1(dni)) {
+                var url = "http://localhost/GitDWES/todo/Saanti/BankApplication/modelo/dao/ClienteDAO.php?";
+                $.ajax({
+                    url: url,
+                    type: 'GET',
+                    dataType: 'json',
+                    data: {iduser: dni},
+                    ansyc: false,
+                    success: function (data) {
 
-        var url = "http://localhost/GitDWES/todo/Saanti/BankApplication/modelo/dao/ClienteDAO.php?";
-        $.ajax({
-            url: url,
-            type: 'GET',
-            dataType: 'json',
-            data: {iduser: dni},
-            success: function (data) {
+                        console.log(data);
 
-                alert(data.datos);
-                datosC = data.datos;
-                console.log(data.datos);
-                if (data.datos === "vacio") {
-                    habilitaNuevoCliente();
+                        if (data.datos === "vacio") {
+                            datos_cliente1 = false;
+                            habilitaNuevoCliente();
 
-                } else {
-                    var x;
-                    text = "";
-                    habilitaTabla();
-                    for (x in data.datos) {
-                        text += data.datos[x] + " ";
+                        } else {
+                            var x;
+                            text = "";
+                            datos_cliente1 = data.datos;
+                            var tableReg = document.getElementById('tc1');
+                            muestra_t_cliente(tableReg, datos_cliente1);
+                            for (x in data.datos) {
+                                text += data.datos[x] + " ";
+                            }
+                            deshabilitaNuevoCliente();
+                            alert(text);
+                        }
+
+
+
+                    },
+                    error: function () {
+                        alert('Error!');
+
                     }
-                    deshabilitaNuevoCliente();
-                    alert(text);
-                }
-
-
-
-            },
-            error: function () {
-                alert('Error!');
-
+                });
+            } else {
+                var div = document.getElementById("err");
+                var err = "Formato de DNI invalido";
+                mensajeErr(div, err);
             }
-        });
+
+
+        }
+
     } else {
-        alert('Entro en else');
-        document.getElementById("div_err").style.display = "block";
-        document.getElementById("div_err").innerHTML = "Ese nº de cuenta no es valido";
+        document.getElementById("err").style.display = "block";
+        document.getElementById("err").innerHTML = "Ese nº de cuenta no es valido";
     }
 
 
 }
+function comporbarCliente2Exist() {
 
-function ComprobarDNI1() {
+    var dni = document.getElementById("inputDNI2").value;
+    var dni1 = document.getElementById("inputDNI1").value;
 
-    var dni = document.getElementById("dni1").value();
+    dehabilata_tabla_c2();
+    if (ComprobarDNI1(dni)) {
+        if (dni !== dni1) {
+            var url = "http://localhost/GitDWES/todo/Saanti/BankApplication/modelo/dao/ClienteDAO.php?";
+            $.ajax({
+                url: url,
+                type: 'GET',
+                dataType: 'json',
+                data: {iduser: dni},
+                ansyc: false,
+                success: function (data) {
+
+                    console.log(data);
+
+                    if (data.datos === "vacio") {
+                        datos_cliente2 = false;
+
+                        habilita_form_c2();
+
+                    } else {
+                        var x;
+                        text = "";
+                        datos_cliente2 = data.datos;
+                        var tableReg = document.getElementById('tc2');
+                        muestra_t_cliente(tableReg, datos_cliente2);
+                        for (x in data.datos) {
+                            text += data.datos[x] + " ";
+                        }
+                        deshabilitaNuevoCliente2();
+                        alert(text);
+                    }
+
+
+
+                },
+                error: function () {
+                    alert('Error!');
+
+                }
+            });
+        } else {
+            var div = document.getElementById("err");
+            var err = "No puede ser igual el dni de los dos titulares";
+            mensajeErr(div, err);
+        }
+
+    } else {
+        var div = document.getElementById("err");
+        var err = "Formato de DNI titular 2 invalido";
+        mensajeErr(div, err);
+    }
+
+
+
+
+
+}
+
+function ComprobarDNI1(dni) {
+
+    //var dni = document.getElementById("dni1").value();
     var expreg = /^[0-9]{8}[A-Z]{1}$/g;
     var valido = false;
     if (expreg.test(dni) === true) {
 
         valido = true;
-    } 
+    }
     return valido;
 }
 
@@ -158,22 +295,19 @@ function ComprobarNcuenta() {
     }
     return ok;
 }
-function cargarEventosOCuenta() {
-    if (document.readyState === "complete") {
-
-        document.getElementById("dni2").addEventListener("click", habilitaSecTitular);
 
 
-    }
-}
 
-function habilitaSecTitular() {
-    document.getElementById("dni2").disabled = false;
-}
 function deshabilitaNuevoCliente() {
 
     document.getElementById("cliente1").style.display = "none";
     document.getElementById("nombreCliente1").style.display = "none";
+
+}
+function deshabilitaNuevoCliente2() {
+
+    document.getElementById("cliente2").style.display = "none";
+    document.getElementById("nombreCliente2").style.display = "none";
 
 }
 function habilitaNuevoCliente() {
@@ -186,40 +320,53 @@ function habilitaNuevoCliente() {
 
 
 }
+function habilitaNuevoCliente2() {
+    var checkBox = document.getElementById("myCheck");
+
+    if (checkBox.checked === true) {
+        document.getElementById("inputDNI2").disabled = false;
+
+    } else {
+        document.getElementById("inputDNI2").disabled = true;
+    }
+
+
+
+}
+function habilita_form_c2() {
+    var utc = new Date().toJSON().slice(0, 10);
+    document.getElementById("inputFechaA2").innerHTML = 'utc';
+
+    document.getElementById("cliente2").style.display = "block";
+    document.getElementById("nombreCliente2").style.display = "block";
+}
 function mostrarDatos() {
     alert(text);
     alert(datosC['cl_dni']);
 }
-function habilitaTabla() {
-    alert('heeeeee');
-    document.getElementById("tc1").style.display = "block";
+function muestra_t_cliente(tableReg, lista) {
+    // console.log('Dentro: '+data);
+    //var tableReg = document.getElementById('table_movi');
+    tableReg.style.display = "block";
+    var cellsOfRow = "";
+    var found = false;
+    for (var i = 1; i < tableReg.rows.length; i++) {
+        cellsOfRow = tableReg.rows[i].getElementsByTagName('td');
+        found = false;
+        // Recorremos todas las celdas
+        for (var j = 0; j < cellsOfRow.length && !found; j++) {
+            //console.log('yee: ' + lista);
+            cellsOfRow[j].innerHTML = lista[j];
 
-    var nombre = datosC['cl_nombre'];
-    document.getElementById("tcNombre1").innerHTML = nombre;
+        }
 
-    var dni = datosC['cl_dni'];
-    document.getElementById("tcDNI1").innerHTML = dni;
-
-    var direcc = datosC['cl_direccion'];
-    document.getElementById("tcDirecc1").innerHTML = direcc;
-
-    var telefono = datosC['cl_telefono'];
-    document.getElementById("tcTelefono1").innerHTML = telefono;
-
-    var email = datosC['cl_email'];
-    document.getElementById("tcEmail1").innerHTML = email;
-
-    var birthday = datosC['cl_fnacimiento'];
-    document.getElementById("tcBirthday1").innerHTML = birthday;
-
-    var fApertura = datosC['cl_fcliente'];
-    document.getElementById("tcApertura1").innerHTML = fApertura;
-
-    var nCuenta = datosC['cl_ncuenta'];
-    document.getElementById("tcNCuentas1").innerHTML = nCuenta;
-
-    var salario = datosC['cl_salario'];
-    document.getElementById("tcSalario1").innerHTML = salario;
+    }
+}
+function dehabilata_tabla_c1() {
+    document.getElementById("tc1").style.display = "none";
+}
+function dehabilata_tabla_c2() {
+    document.getElementById("tc2").style.display = "none";
 }
 function crearCliente() {
     var errCliente = false;
@@ -250,4 +397,12 @@ function crearCliente() {
         }
     });
     return errCliente;
+}
+function mensajeErr(div, err) {
+    div.style.display = "block";
+    div.style.color = "red";
+    div.innerHTML = err;
+}
+function deshabilitaDivErr() {
+    document.getElementById('err').style.display = "none";
 }

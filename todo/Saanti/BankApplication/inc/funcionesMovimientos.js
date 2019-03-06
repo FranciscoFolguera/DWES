@@ -1,5 +1,5 @@
 document.addEventListener("readystatechange", cargarEventosMovi, false);
-
+var lista_mov;
 
 function cogerMovi() {
     var url = "http://localhost/GitDWES/todo/Saanti/BankApplication/modelo/dao/MovimientoDAO.php?";
@@ -9,17 +9,20 @@ function cogerMovi() {
     $.ajax({
         type: "POST",
         url: url,
-dataType:'json',
+        dataType: 'json',
         data: {select_movi: 1, nCuenta: f_nc, priMovi: f_priMovi, lastMovi: f_lastMovi},
+        asycn: false,
         success: function (data)
         {
-          
-            if(Array.isArray(data.datos)){
-                muestra_t_cliente2(data.datos);
-            }else{
-                var div= document.getElementById("err");
-                var err=data.datos;
-                mensajeErr(div,err);
+
+            if (Array.isArray(data.datos)) {
+                lista_mov = data.datos[0];
+                muestra_t_cliente2(data.datos[0]);
+                deshabilitaEnvioMov();
+            } else {
+                var div = document.getElementById("err");
+                var err = data.datos;
+                mensajeErr(div, err);
             }
         }
 
@@ -46,7 +49,8 @@ function cargarEventosMovi() {
 
 }
 
-function muestra_t_cliente2(data) {
+function muestra_t_cliente2() {
+    // console.log('Dentro: '+data);
     var tableReg = document.getElementById('table_movi');
     tableReg.style.display = "block";
     var cellsOfRow = "";
@@ -56,7 +60,8 @@ function muestra_t_cliente2(data) {
         found = false;
         // Recorremos todas las celdas
         for (var j = 0; j < cellsOfRow.length && !found; j++) {
-            cellsOfRow[j].innerHTML = lista_cliente_2[j];
+            console.log('yee: ' + lista_mov);
+            cellsOfRow[j].innerHTML = lista_mov[j];
 
         }
 
@@ -65,7 +70,7 @@ function muestra_t_cliente2(data) {
 
 function ComprobarNcuenta() {
     var ok = false;
-
+    deshabilitaTabla();
     var nCuenta = document.getElementById("nCuenta").value;
     var cadena = nCuenta.toString();
     var miniCadena = cadena.substring(0, 9);
@@ -134,6 +139,9 @@ function deshabilitaEnvioMov() {
     document.getElementById("lastMovi").disabled = true;
     document.getElementById("bEnviar").disabled = true;
 
+}
+function deshabilitaTabla() {
+    document.getElementById('table_movi').style.display = "none";
 }
 function mensajeErr(div, err) {
     div.style.display = "block";

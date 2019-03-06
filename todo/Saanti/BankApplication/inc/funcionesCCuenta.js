@@ -18,7 +18,7 @@ function cargarEventosMovi() {
 }
 function ComprobarNcuenta() {
     var ok = false;
-
+    habilitaClick();
     var nCuenta = document.getElementById("nCuenta").value;
     // alert(nCuenta);
     var cadena = nCuenta.toString();
@@ -184,6 +184,7 @@ function comporbarNcuentaExist() {
                 var div = document.getElementById("err");
                 var err = "Ese numero de cuenta no existe";
                 mensajeErr(div, err);
+                deshabilitaClick();
             }
 
 
@@ -240,4 +241,12 @@ function deshabilitaTablas() {
 }
 function deshabilitaDivErr() {
     document.getElementById('err').style.display = "none";
+}
+function deshabilitaClick() {
+    document.getElementById("bCuenta").disabled = true;
+
+}
+function habilitaClick(){
+        document.getElementById("bCuenta").disabled = false;
+
 }
