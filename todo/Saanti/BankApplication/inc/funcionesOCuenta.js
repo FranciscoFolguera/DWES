@@ -33,7 +33,7 @@ function comporbarNcuentaExist() {
     deshabilitaDivErr();
     var n_c = document.getElementById("inputNcuenta").value;
 
-    var url = "http://localhost/GitDWES/todo/Saanti/BankApplication/modelo/dao/CuentaDAO.php?";
+    var url = "http://192.168.103.155/GitDWES/todo/Saanti/BankApplication/modelo/dao/CuentaDAO.php?";
     $.ajax({
         url: url,
         type: 'GET',
@@ -136,7 +136,7 @@ function comporbarClienteExist() {
             var dni = document.getElementById("inputDNI1").value;
             dehabilata_tabla_c1();
             if (ComprobarDNI1(dni)) {
-                var url = "http://localhost/GitDWES/todo/Saanti/BankApplication/modelo/dao/ClienteDAO.php?";
+                var url = "http://192.168.103.155/GitDWES/todo/Saanti/BankApplication/modelo/dao/ClienteDAO.php?";
                 $.ajax({
                     url: url,
                     type: 'GET',
@@ -196,7 +196,7 @@ function comporbarCliente2Exist() {
     dehabilata_tabla_c2();
     if (ComprobarDNI1(dni)) {
         if (dni !== dni1) {
-            var url = "http://localhost/GitDWES/todo/Saanti/BankApplication/modelo/dao/ClienteDAO.php?";
+            var url = "../modelo/dao/ClienteDAO.php?";
             $.ajax({
                 url: url,
                 type: 'GET',
@@ -379,7 +379,7 @@ function crearCliente() {
     var objLlamada = {lista: arrayDatos};
     alert(objLlamada);
     alert('Cliente:  ' + arrayDatos);
-    var url = "http://localhost/GitDWES/todo/Saanti/BankApplication/modelo/dao/ClienteDAO.php?" + objLlamada;
+    var url = "../modelo/dao/ClienteDAO.php?" + objLlamada;
     // console.log(arrayDatos);
     $.ajax({
         url: url,

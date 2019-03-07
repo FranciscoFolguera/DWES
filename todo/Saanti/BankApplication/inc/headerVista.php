@@ -6,6 +6,7 @@
 		<meta charset="UTF-8">
                 <script src="../inc/funcionesMovimientos.js" type="text/javascript"></script>
                 <script src="../files/JQueryFile/jquery-3.3.1.min.js" type="text/javascript"></script>
+                <link href="../css/newstyle.css" rel="stylesheet" type="text/css"/>
 	</head>
 	<body>
 	

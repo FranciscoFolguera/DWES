@@ -1,8 +1,8 @@
 <?php
 
-    include_once '../inc/headerIngresos.html';
+include_once '../inc/headerIngresos.html';
 
 
-    include '../inc/formIngresos.php';
-    
-    include_once '../inc/footer.php';
+include '../inc/formIngresos.php';
+
+include_once '../inc/footer.php';

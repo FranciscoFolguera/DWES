@@ -49,7 +49,7 @@ function selectMovimientos(Movimiento $movimiento, $fechaInicial, $fechaFinal) {
         $q->execute($datos);
         $rows = array();
         $q->setFetchMode();
-        $rows = $q->fetchAll();
+        $rows = $q->fetchAll(PDO::FETCH_NUM);
         if (count($rows) > 0) {
             return $rows;
         } else {

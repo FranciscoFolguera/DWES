@@ -152,7 +152,7 @@ function comporbarNcuentaExist() {
     deshabilitaDivErr();
     deshabilitaTablas();
     var n_c = document.getElementById("nCuenta").value;
-    var url = "http://localhost/GitDWES/todo/Saanti/BankApplication/modelo/dao/CuentaDAO.php?";
+    var url = "../modelo/dao/CuentaDAO.php?";
     $.ajax({
         url: url,
         type: 'GET',
@@ -203,7 +203,7 @@ function comporbarNcuentaExist() {
 }
 function borrarCuenta() {
     var n_c = document.getElementById("nCuenta").value;
-    var url = "http://localhost/GitDWES/todo/Saanti/BankApplication/modelo/dao/CuentaDAO.php?";
+    var url = "../modelo/dao/CuentaDAO.php?";
     var nc_cli2;
     if (lista_cliente_2 === -1) {
         nc_cli2 = -1;

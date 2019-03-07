@@ -93,7 +93,7 @@ function conformidadMov(check_im) {
 function comporbarNcuentaExist() {
 
     var n_c = document.getElementById("nCuenta").value;
-    var url = "http://localhost/GitDWES/todo/Saanti/BankApplication/modelo/dao/CuentaDAO.php?";
+    var url = "../modelo/dao/CuentaDAO.php?";
     $.ajax({
         url: url,
         type: 'GET',
@@ -137,7 +137,7 @@ function grabarRegistro(importe) {
    
     var concepto = document.getElementById("f_concepto").value;
     
-    var url = "http://localhost/GitDWES/todo/Saanti/BankApplication/modelo/dao/MovimientoDAO.php?";
+    var url = "../modelo/dao/MovimientoDAO.php?";
     $.ajax({
         url: url,
         type: 'GET',

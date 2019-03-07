@@ -2,7 +2,7 @@ document.addEventListener("readystatechange", cargarEventosMovi, false);
 var lista_mov;
 
 function cogerMovi() {
-    var url = "http://localhost/GitDWES/todo/Saanti/BankApplication/modelo/dao/MovimientoDAO.php?";
+    var url = "../modelo/dao/MovimientoDAO.php?";
     var f_nc = document.getElementById("nCuenta").value;
     var f_priMovi = document.getElementById("priMovi").value;
     var f_lastMovi = document.getElementById("lastMovi").value;
@@ -16,8 +16,9 @@ function cogerMovi() {
         {
 
             if (Array.isArray(data.datos)) {
-                lista_mov = data.datos[0];
-                muestra_t_cliente2(data.datos[0]);
+               
+                tablaInfo_k(data.datos);
+
                 deshabilitaEnvioMov();
             } else {
                 var div = document.getElementById("err");
@@ -49,7 +50,46 @@ function cargarEventosMovi() {
 
 }
 
-function muestra_t_cliente2() {
+function tablaInfo_k(array) {
+    var desc = ["Nº Bancario", "Fecha", "Hora", "Descripcion", "Importe"];
+    var div = document.getElementById('info');
+    var tabla = document.createElement('table');
+   
+
+    var tbody = document.createElement('tbody');
+    var thead = document.createElement('thead');
+    var tr = document.createElement('tr');
+
+    for (var z = 0; z < desc.length; z++) {
+        var th1 = document.createElement('th');
+        var texto = document.createTextNode(desc[z]);
+        th1.appendChild(texto);
+        tr.appendChild(th1);
+
+    }
+//   
+    thead.appendChild(tr);
+    tabla.appendChild(thead);
+    for (var i in array) {
+        var tr = document.createElement('tr');
+        console.log(array[i]);
+
+        for (var j = 0; j < array[i].length; j++) {
+            var td = document.createElement('td');
+            alert(array[i][j]);
+            var texto = document.createTextNode(array[i][j]);
+            td.appendChild(texto);
+            tr.appendChild(td);
+        }
+        tbody.appendChild(tr);
+        tabla.appendChild(tbody);
+    }
+    while (div.firstChild) {
+        div.removeChild(div.firstChild);
+    }
+    div.appendChild(tabla);
+}
+function muestra_t_cliente2(lista_mov) {
     // console.log('Dentro: '+data);
     var tableReg = document.getElementById('table_movi');
     tableReg.style.display = "block";
@@ -59,11 +99,14 @@ function muestra_t_cliente2() {
         cellsOfRow = tableReg.rows[i].getElementsByTagName('td');
         found = false;
         // Recorremos todas las celdas
-        for (var j = 0; j < cellsOfRow.length && !found; j++) {
-            console.log('yee: ' + lista_mov);
-            cellsOfRow[j].innerHTML = lista_mov[j];
+        for (var l = 0; l < lista_mov.length; l++) {
+            for (var j = 0; j < cellsOfRow.length && !found; j++) {
+                console.log('yee: ' + lista_mov);
+                cellsOfRow[j].innerHTML = lista_mov[l][j];
 
+            }
         }
+
 
     }
 }
