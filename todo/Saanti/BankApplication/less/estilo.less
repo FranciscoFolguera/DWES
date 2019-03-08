@@ -1,0 +1,52 @@
+
+/*LESS*/
+ 
+/*Variables*/
+ 
+@colorActivado:#80CBC4;
+ 
+@colorFondo:#BFC9CA;
+@padding: 14px;
+@margin-bottom: 20px;
+@im-posi:#58D68D;
+@im-negativo:#E74C3C;
+
+ //&nbsp;
+
+ body{
+     padding: @padding+5;
+     
+ }
+ .importePostivo{
+     background-color: @im-posi;
+ }
+ .importeNegativo{
+     background-color: @im-negativo;
+ }
+.menu{
+  list-style-type: none;
+  margin: 0;
+  padding: 0;
+  margin-bottom: @margin-bottom;
+  overflow: hidden;
+  background-color: @colorFondo;
+}
+li {
+  float: left;
+}
+
+li a {
+  display: block;
+  color: white;
+  text-align: center;
+  padding: @padding;
+  text-decoration: none;
+}
+
+li a:hover:not(.active) {
+  background-color: @colorActivado;
+}
+
+.active {
+  background-color: @colorActivado;
+}

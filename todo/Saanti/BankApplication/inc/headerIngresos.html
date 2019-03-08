@@ -6,17 +6,19 @@
 		<meta charset="UTF-8">
                 <script src="../inc/funcionesIngresos.js" type="text/javascript"></script>
                 <script src="../files/JQueryFile/jquery-3.3.1.min.js" type="text/javascript"></script>
-	 <link href="../css/newstyle.css" rel="stylesheet" type="text/css"/>
+	<link rel="stylesheet/less" type="text/css" href="../less/estilo.less" />
+        <script src="//cdnjs.cloudflare.com/ajax/libs/less.js/3.9.0/less.min.js" ></script>   
          
     </head>
    
     <body>
 
-        <h2>Cierre de cuentas</h2>
-        <ul>
+       
+        <ul class="menu">
             <li><a href="./open_cuenta.php">Abrir cuenta</a></li>
             <li><a href="./movimiento.php">Listado de moviminetos</a></li>
-            <li><a href="./ingresos.php">Ingresos y reintegros</a></li>
+            <li class="active"><a href="./ingresos.php">Ingresos y reintegros</a></li>
             <li><a href="./close_cuenta.php">Cerrar cuenta</a></li>
 
         </ul>
+         <h2>Ingresos y reintegros</h2>

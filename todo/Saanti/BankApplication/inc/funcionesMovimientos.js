@@ -72,12 +72,22 @@ function tablaInfo_k(array) {
     tabla.appendChild(thead);
     for (var i in array) {
         var tr = document.createElement('tr');
-        console.log(array[i]);
 
         for (var j = 0; j < array[i].length; j++) {
             var td = document.createElement('td');
-            alert(array[i][j]);
+            
             var texto = document.createTextNode(array[i][j]);
+            
+            if(array[i][j]===array[i][4]){
+                var c=parseInt(array[i][4]);
+                if(c>0){
+                    tr.classList.add("importePostivo");
+                    
+                }else{
+                    tr.classList.add("importeNegativo");
+                }
+              
+            }
             td.appendChild(texto);
             tr.appendChild(td);
         }
