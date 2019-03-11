@@ -1,4 +1,4 @@
-
+<!-- enctype="multipart/form-data" para enviar ficheros -->
 <form  method="get"   action ="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]); ?>">
 
 
