@@ -16,46 +16,37 @@ class Concurso {
     function getListaPreguntas() {
         return $this->listaPreguntas;
     }
+    function setIndiceMas1() {
+        $this->indice = $this->indice+1;
+    }
 
-    function __construct($nombre = null, $indice = null, $listaPreguntas = null) {
+        function __construct($nombre = null, $listaPreguntas = null) {
         $this->nombre = $nombre;
-        $this->indice = $indice;
+        //$this->indice = $indice;
         $this->listaPreguntas = $listaPreguntas;
     }
 
     public function cargaPreguntas($tema) {
         include_once './inc/funciones.php';
-        $listaPreguntas = array();
+
         if ($tema === Concurso::PAISES) {
             $fichero = 'paises.txt';
-            $listaPreguntas = leerPreguntas($fichero);
-            shuffle($listaPreguntas);
-            
-        } else {
+            $this->listaPreguntas = leerPreguntas($fichero);
+            shuffle($this->listaPreguntas);
+        } else if ($tema === Concurso::LIBROS) {
             $fichero = 'libros.txt';
-            $listaPreguntas = leerPreguntas($fichero);
-            shuffle($listaPreguntas);
-            
+            $this->listaPreguntas = leerPreguntas($fichero);
+            shuffle($this->listaPreguntas);
         }
-        return $listaPreguntas;
+
+        return $this->listaPreguntas;
     }
 
-    function cogerPregunta($indice) {
-
-        $lista = $this->getListaPreguntas();
-
-        $pregunta = "";
-
-
-        foreach ($lista[$indice] as $key => $value) {
-            if ($key === 0) {
-                $pregunta = $value;
-            }
-        }
+    function cogerPregunta() {
+       echo $this->indice;
+        $pregunta = $this->listaPreguntas [$this->indice][0];
         return $pregunta;
     }
-
-    
 
     public function getPista($indice) {
         $lista = $this->getListaPreguntas();
@@ -70,16 +61,9 @@ class Concurso {
         return $pista;
     }
 
-    public function getSolucion($indice) {
-        $listaP = $this->getListaPreguntas();
-        $respuesta = "";
-
-
-        foreach ($listaP[$indice] as $key => $value) {
-            if ($key === 1) {
-                $respuesta = $value;
-            }
-        }
+    public function getSolucion() {
+        $respuesta = $this->listaPreguntas [$this->indice][1];
+       echo $respuesta;
         return $respuesta;
     }
 
@@ -95,22 +79,27 @@ class Concurso {
         }
         return $pregunta;
     }
-public function esCorrecta($respuestaForm, $indice) {
+
+    public function esCorrecta($respuestaForm) {
         $esCorrecta = false;
-        $respuestaPregunta = $this->getSolucion($indice);
+        $respuestaPregunta = $this->getSolucion();
+        
+       
+
         if ($respuestaForm === $respuestaPregunta) {
             $esCorrecta = true;
         }
         return $esCorrecta;
     }
-    /*
-      public function siguientePregunta($indice,$listaP){
-      $siguientePregunta=true;
-      $numeroPreguntas=count($listaP)--;
 
-      if($indice>=$numeroPreguntas){
-      $siguientePregunta=false;
-      }
-      return $siguientePregunta;
-      } */
+    public function siguientePregunta($indice, $listaP) {
+        $siguientePregunta = true;
+        $numeroPreguntas = count($listaP) -1;
+
+        if ($indice >= $numeroPreguntas) {
+            $siguientePregunta = false;
+        }
+        return $siguientePregunta;
+    }
+
 }
